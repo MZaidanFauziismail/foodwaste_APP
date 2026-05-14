@@ -1,111 +1,149 @@
 @extends('layouts.app')
 
-@section('title', 'Feed')
+@section('title', 'Home')
 
 @section('content')
-    <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-start;">
-        <div style="flex:1; min-width:320px;">
-            <div class="card" style="margin-bottom:1rem;">
-                <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
-                    <div>
-                        <h2>Feed Makanan Lokal</h2>
-                        <p class="help-text">Lihat makanan di sekitar berdasarkan jarak atau waktu posting terbaru.</p>
-                    </div>
-                    <form method="GET" action="{{ route('feed') }}" style="display:flex; gap:0.75rem; align-items:center;">
-                        <label for="sort">Urutkan:</label>
-                        <select id="sort" name="sort" onchange="this.form.submit()">
-                            <option value="distance" {{ $sort === 'distance' ? 'selected' : '' }}>Jarak Terdekat</option>
-                            <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Posting Terbaru</option>
-                        </select>
-                    </form>
-                </div>
-            </div>
+<section class="space-y-4">
 
-            @if (!$location)
-                <div class="banner">
-                    Aplikasi membutuhkan izin lokasi untuk menampilkan makanan yang paling dekat dengan Anda.
-                    <button id="request-loc" class="button button-primary" type="button">Izinkan Lokasi</button>
-                </div>
-            @endif
+    <div class="flex items-start justify-between">
+        <div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-[#6d3df5]">
+                sharebite
+            </h1>
 
-            @if($alerts->isNotEmpty())
-                <div class="banner" style="background: rgba(248,213,12,.14); border-color: rgba(245,158,11,.25);">
-                    <strong>Alert:</strong> Ada postingan baru yang cocok dengan kata kunci "{{ auth()->user()->notification_keyword }}".
-                </div>
-            @endif
-
-            @if($posts->isEmpty())
-                <div class="card">
-                    <p>Tidak ada postingan tersedia di radius Anda saat ini. Coba perbesar radius atau tunggu postingan baru.</p>
-                </div>
-            @endif
-
-            <div class="grid grid-2" style="gap:1rem;">
-                @foreach($posts as $post)
-                    <article class="card">
-                        <img src="{{ $post->photo_path ? asset('storage/'.$post->photo_path) : 'https://via.placeholder.com/420x240?text=Food' }}" alt="{{ $post->title }}" style="width:100%; border-radius:1rem; object-fit:cover; aspect-ratio:16/9;">
-                        <div style="margin-top:1rem;">
-                            <div style="display:flex; justify-content:space-between; gap:0.75rem; align-items:flex-start; flex-wrap:wrap;">
-                                <h3 style="margin:0;">{{ $post->title }}</h3>
-                                <span class="pill">{{ $post->label }}</span>
-                            </div>
-                            <p class="help-text">{{ Str::limit($post->description, 80) }}</p>
-                            <p style="margin:0.75rem 0 0; font-size:0.95rem; color:var(--muted);">Lokasi: {{ $post->location_text }}</p>
-                            @if(isset($post->distance))
-                                <p style="margin:0.35rem 0 0; font-size:0.95rem;"><strong>{{ round($post->distance) }} m</strong> dari Anda</p>
-                            @endif
-                            <p style="margin-top:0.5rem; color:var(--muted);">Tersedia sampai {{ $post->available_until->format('d M Y H:i') }}</p>
-                            <a class="button button-primary" href="{{ route('posts.show', $post) }}" style="margin-top:0.8rem;">Lihat Detail</a>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+            <p class="mt-2 text-xs font-medium text-slate-500">
+                Hackney, London · 1 mile radius
+            </p>
         </div>
 
-        <aside style="width:320px; min-width:280px;">
-            <div class="card">
-                <h3>Info Cepat</h3>
-                <p class="help-text">Setiap postingan menunjukkan jarak dan status ketersediaan. Untuk hasil terbaik, izinkan lokasi.</p>
-                <p><strong>Radius pencarian:</strong> {{ auth()->user()->radius_km }} km</p>
-                <p><strong>Keyword alert:</strong> {{ auth()->user()->notification_keyword ?: 'Belum diatur' }}</p>
-                <a class="button button-secondary" href="{{ route('posts.create') }}">Bagikan / Jual Makanan</a>
-                <a class="button button-secondary" href="{{ route('profile.index') }}">Atur Preferensi</a>
-            </div>
-        </aside>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+
+            <button
+                type="submit"
+                class="relative flex h-11 w-11 items-center justify-center rounded-full bg-[#f7f3ff] text-xs font-extrabold text-[#6d3df5]"
+                title="Logout"
+            >
+                <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-400"></span>
+            </button>
+        </form>
     </div>
 
-    <script>
-        const requestButton = document.getElementById('request-loc');
-        const locationRoute = '{{ route('location.update') }}';
+    <form method="GET" action="{{ route('feed') }}">
+        <div class="rounded-2xl bg-slate-100 px-4 py-3">
+            <input
+                type="search"
+                name="q"
+                value="{{ request('q') }}"
+                placeholder="Search food and items..."
+                class="w-full bg-transparent text-xs font-semibold text-slate-600 outline-none placeholder:text-slate-400"
+            >
+        </div>
 
-        const requestLocation = () => {
-            if (!navigator.geolocation) {
-                alert('Browser Anda tidak mendukung geolokasi.');
-                return;
-            }
-            navigator.geolocation.getCurrentPosition((pos) => {
-                fetch(locationRoute, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                    body: JSON.stringify({
-                        latitude: pos.coords.latitude,
-                        longitude: pos.coords.longitude,
-                    }),
-                }).then(() => {
-                    window.location.reload();
-                });
-            }, () => {
-                alert('Izin lokasi ditolak. Feed akan menampilkan postingan umum.');
-            });
-        };
+        <input type="hidden" name="sort" value="{{ $sort }}">
+    </form>
 
-        requestButton?.addEventListener('click', requestLocation);
+    <div class="flex gap-2 overflow-x-auto pb-1">
+        <a
+            href="{{ route('feed', ['sort' => $sort]) }}"
+            class="shrink-0 rounded-full bg-[#6d3df5] px-4 py-2 text-xs font-extrabold text-white"
+        >
+            All
+        </a>
 
-        @if(!$location)
-            setTimeout(requestLocation, 500);
-        @endif
-    </script>
+        <span class="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-slate-400 shadow-sm">
+            Food
+        </span>
+
+        <span class="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-slate-400 shadow-sm">
+            Non-food
+        </span>
+
+        <span class="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-slate-400 shadow-sm">
+            Deals
+        </span>
+    </div>
+
+    @if($posts->isEmpty())
+        <div class="rounded-[24px] border border-slate-100 bg-white p-6 text-center shadow-sm">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f4efe4] text-3xl">
+                🍱
+            </div>
+
+            <h2 class="mt-4 text-base font-extrabold text-slate-950">
+                Belum ada makanan
+            </h2>
+
+            <p class="mt-2 text-xs leading-5 text-slate-500">
+                Belum ada postingan di radius kamu. Coba buat postingan baru.
+            </p>
+
+            <a
+                href="{{ route('posts.create') }}"
+                class="mt-5 flex w-full items-center justify-center rounded-full bg-[#6d3df5] px-4 py-3 text-xs font-extrabold text-white"
+            >
+                Bagikan Makanan
+            </a>
+        </div>
+    @endif
+
+    <div class="grid grid-cols-2 gap-3">
+        @foreach($posts as $post)
+            @php
+                $icons = ['🍞', '🥦', '🍰', '🍋', '🍱', '🥗'];
+                $userName = optional($post->user)->name ?? 'User';
+                $initial = strtoupper(substr($userName, 0, 1));
+            @endphp
+
+            <article class="overflow-hidden rounded-[18px] border border-slate-100 bg-white shadow-sm">
+                <a href="{{ route('posts.show', $post) }}" class="block">
+
+                    <div class="flex h-[118px] items-center justify-center overflow-hidden bg-[#eee8db]">
+                        @if($post->photo_path)
+                            <img
+                                src="{{ asset('storage/' . $post->photo_path) }}"
+                                alt="{{ $post->title }}"
+                                class="h-full w-full object-cover"
+                            >
+                        @else
+                            <div class="text-4xl">
+                                {{ $icons[$loop->index % count($icons)] }}
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="p-3">
+                        <h2 class="line-clamp-2 min-h-[32px] text-xs font-extrabold leading-4 text-slate-950">
+                            {{ $post->title }}
+                        </h2>
+
+                        <p class="mt-1 text-[10px] font-medium text-slate-400">
+                            @if(isset($post->distance))
+                                {{ round($post->distance, 1) }} mi
+                            @else
+                                0.3 mi
+                            @endif
+                        </p>
+
+                        <div class="mt-3 flex items-center justify-between gap-2">
+                            <div class="flex min-w-0 items-center gap-2">
+                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[9px] font-extrabold text-emerald-600">
+                                    {{ $initial }}
+                                </span>
+
+                                <span class="truncate text-[9px] font-semibold text-slate-500">
+                                    {{ $userName }}
+                                </span>
+                            </div>
+
+                            <span class="shrink-0 rounded-full bg-emerald-50 px-2 py-1 text-[9px] font-extrabold text-emerald-600">
+                                {{ $post->label === 'Harga Diskon' ? 'Deal' : 'Free' }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        @endforeach
+    </div>
+</section>
 @endsection
