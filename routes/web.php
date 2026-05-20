@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PostController;
@@ -37,6 +38,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/chats/posts/{post}/users/{user}', [ChatController::class, 'store'])
         ->name('chats.store');
+
+    Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'updateSettings'])->name('profile.update');

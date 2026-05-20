@@ -11,7 +11,7 @@
 @endphp
 
 <section class="space-y-5">
-    <div class="overflow-hidden rounded-[32px] border border-purple-100 bg-white shadow-2xl shadow-purple-200/60">
+    <div class="overflow-hidden w-full bg-white">
         <div class="relative">
             @if($post->photo_path)
                 <img

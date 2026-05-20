@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="flex min-h-[70vh] items-center">
-    <div class="relative w-full overflow-hidden rounded-[32px] border border-purple-100 bg-white p-7 shadow-2xl shadow-purple-200/60">
+    <div class="relative w-full overflow-hidden w-full bg-white px-2 py-6 sm:px-6">
         <div class="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-purple-300/40"></div>
         <div class="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-emerald-200/40"></div>
 
