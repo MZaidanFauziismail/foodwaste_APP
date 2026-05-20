@@ -3,8 +3,9 @@
 @section('title', 'Sign Up')
 
 @section('content')
-<section class="flex min-h-[70vh] items-center">
-    <div class="relative w-full overflow-hidden rounded-[32px] border border-purple-100 bg-white p-7 shadow-2xl shadow-purple-200/60">
+<section class="flex flex-col justify-center min-h-full">
+    <div class="relative w-full overflow-hidden bg-white px-2 py-6 sm:px-6">
+        
         <div class="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-purple-300/40"></div>
         <div class="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-emerald-200/40"></div>
 
@@ -90,14 +91,14 @@
 
                 <button
                     type="submit"
-                    class="w-full rounded-full bg-purple-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-purple-300/60 transition hover:bg-purple-700"
+                    class="mt-8 w-full rounded-full bg-purple-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-purple-300/60 transition hover:bg-purple-700"
                 >
                     Daftar
                 </button>
 
                 <a
                     href="{{ route('login') }}"
-                    class="flex w-full items-center justify-center rounded-full border border-purple-300 bg-white px-6 py-4 text-sm font-bold text-purple-800 transition hover:bg-purple-50"
+                    class="mt-4 flex w-full items-center justify-center rounded-full border border-purple-300 bg-white px-6 py-4 text-sm font-bold text-purple-800 transition hover:bg-purple-50"
                 >
                     Sudah punya akun? Log In
                 </a>
