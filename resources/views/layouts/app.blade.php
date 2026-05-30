@@ -2,16 +2,33 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Food Waste App')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        :root {
+            --app-safe-bottom: max(28px, env(safe-area-inset-bottom));
+        }
+
+        .app-main-normal {
+            padding-bottom: calc(160px + var(--app-safe-bottom));
+        }
+
+        .app-bottom-nav {
+            padding-bottom: calc(28px + var(--app-safe-bottom));
+        }
+    </style>
 </head>
 
 <body class="min-h-screen bg-white text-slate-950 antialiased">
-    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-white">
+    <div class="relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden bg-white">
 
         @unless(request()->routeIs('chats.*'))
             <header class="shrink-0 border-b border-purple-100 bg-white/90 px-4 pt-12 pb-4 backdrop-blur">
@@ -48,7 +65,6 @@
                                 class="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-sm font-extrabold text-white shadow-lg shadow-purple-200 ring-4 ring-purple-100"
                                 title="Buka Profil"
                             >
-                                {{-- DIUBAH: Menggunakan mb_ untuk keamanan multi-byte character (PHP 8.4) --}}
                                 {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1, 'UTF-8'), 'UTF-8') }}
                             </a>
 
@@ -84,15 +100,13 @@
             </div>
         @endif
 
-        {{-- PERBAIKAN: Menambahkan pt-14 dan px-4 agar konten chat tidak menabrak status bar HP --}}
-        <main class="{{ request()->routeIs('chats.*') ? 'flex-1 overflow-hidden pt-14 px-4' : 'flex-1 overflow-y-auto px-4 py-6 pb-32' }}">
+        <main class="{{ request()->routeIs('chats.*') ? 'flex-1 overflow-hidden px-4 pt-14 pb-8' : 'app-main-normal flex-1 overflow-y-auto px-4 py-6' }}">
             @yield('content')
         </main>
 
         @auth
             @unless(request()->is('chats/*'))
-                {{-- DIUBAH: Dari absolute ke fixed agar menempel di layar mobile saat di-scroll --}}
-                <nav class="fixed bottom-0 left-0 right-0 z-[9999] border-t border-purple-100 bg-white/95 px-4 pb-8 pt-4 shadow-2xl backdrop-blur">
+                <nav class="app-bottom-nav fixed bottom-0 left-0 right-0 z-[9999] border-t border-purple-100 bg-white/95 px-4 pt-5 shadow-2xl backdrop-blur">
                     <a
                         href="{{ route('posts.create') }}"
                         class="absolute left-1/2 top-0 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-3xl font-bold text-white shadow-2xl shadow-purple-300/80 transition {{ request()->routeIs('posts.create') ? 'bg-purple-700 scale-105' : 'bg-purple-600' }}"
