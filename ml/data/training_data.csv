@@ -1,0 +1,151 @@
+title,description,category,safety_label,impact_meals
+Ikan mentah pickup cepat,Tidak ada es dan bau amis kuat prioritas ambil hari ini,food,risky,0
+Paket lauk matang pickup cepat,Ayam tempe sayur baru selesai dimasak prioritas ambil hari ini,food,safe,4
+Roti tawar sealed,Masih segel beli kemarin malam pickup hari ini,food,safe,3
+Stoples kaca area kampus,Jar bekas selai sudah dicuci lokasi dekat kampus,non_food,safe,0
+Wanted tote bag pickup cepat,Cari tote bag belanja tanpa plastik prioritas ambil hari ini,non_food,safe,0
+Kopi sachet,Kemasan masih rapi dan belum expired,food,safe,1
+Donat box,Sisa meeting pagi kemasan bersih,food,safe,4
+Susu terbuka area kampus,Sudah dibuka dua hari di suhu ruang lokasi dekat kampus,food,risky,0
+Nasi bungkus,Tidak jelas dibuat kapan,food,risky,1
+Sup sisa area kampus,Tersimpan suhu ruang lebih dari semalam lokasi dekat kampus,food,risky,0
+Forum tips kompos,Diskusi cara mengolah sampah organik,non_food,safe,0
+Roti gandum area kampus,Baru dibeli dan kemasan utuh lokasi dekat kampus,food,safe,3
+Bubur kacang hijau pickup cepat,Dimasak pagi dan masih hangat prioritas ambil hari ini,food,safe,3
+Daging mentah pickup cepat,Raw food tanpa pendingin dari pagi prioritas ambil hari ini,food,risky,0
+Sayur layu,Warna berubah dan tekstur lembek,food,risky,1
+Komposter mini pickup cepat,Alat kompos rumahan masih jalan prioritas ambil hari ini,non_food,safe,0
+Bento ayam matang area kampus,Masakan hari ini jam 12 kemasan tertutup lokasi dekat kampus,food,safe,2
+Susu UHT kotak area kampus,Belum dibuka tanggal masih aman lokasi dekat kampus,food,safe,2
+Kue basi,Tercium bau asam dan tekstur berubah,food,risky,0
+Mie instan pickup cepat,Kemasan utuh exp tahun depan prioritas ambil hari ini,food,safe,2
+Sayur layu area kampus,Warna berubah dan tekstur lembek lokasi dekat kampus,food,risky,1
+Susu terbuka pickup cepat,Sudah dibuka dua hari di suhu ruang prioritas ambil hari ini,food,risky,0
+Sendok garpu,Set alat makan stainless,non_food,safe,0
+Buah busuk area kampus,Ada bagian hitam lembek dan bau lokasi dekat kampus,food,risky,0
+Roti sobek area kampus,Masih lembut dibuat pagi ini lokasi dekat kampus,food,safe,3
+Tote bag polos pickup cepat,Tas belanja kain masih bagus prioritas ambil hari ini,non_food,safe,0
+Makanan basah,Kemasan bocor dan berbau,food,risky,0
+Makanan expired pickup cepat,Tanggal kadaluarsa sudah lewat prioritas ambil hari ini,food,risky,0
+Paket lauk matang area kampus,Ayam tempe sayur baru selesai dimasak lokasi dekat kampus,food,safe,4
+Kardus pindahan area kampus,Box bersih bisa dipakai ulang lokasi dekat kampus,non_food,safe,0
+Roti tawar sealed pickup cepat,Masih segel beli kemarin malam pickup hari ini prioritas ambil hari ini,food,safe,3
+Lunch box reusable,Bersih jarang dipakai cocok meal prep,non_food,safe,0
+Bubur kacang hijau area kampus,Dimasak pagi dan masih hangat lokasi dekat kampus,food,safe,3
+Nasi box event,Baru dibagikan siang ini kemasan tertutup,food,safe,4
+Paket buah fresh pickup cepat,Apel jeruk masih fresh dan bersih prioritas ambil hari ini,food,safe,3
+Ikan mentah area kampus,Tidak ada es dan bau amis kuat lokasi dekat kampus,food,risky,0
+Nasi bungkus pickup cepat,Tidak jelas dibuat kapan prioritas ambil hari ini,food,risky,1
+Tote bag polos area kampus,Tas belanja kain masih bagus lokasi dekat kampus,non_food,safe,0
+Sayur organik area kampus,Sisa belanja pagi masih segar belum dimasak lokasi dekat kampus,food,safe,3
+Nasi bungkus area kampus,Tidak jelas dibuat kapan lokasi dekat kampus,food,risky,1
+Sayur organik,Sisa belanja pagi masih segar belum dimasak,food,safe,3
+Komposter mini,Alat kompos rumahan masih jalan,non_food,safe,0
+Buah busuk,Ada bagian hitam lembek dan bau,food,risky,0
+Lunch box reusable area kampus,Bersih jarang dipakai cocok meal prep lokasi dekat kampus,non_food,safe,0
+Buku catatan aesthetic pickup cepat,Beberapa halaman pertama terpakai prioritas ambil hari ini,non_food,safe,0
+Makanan expired area kampus,Tanggal kadaluarsa sudah lewat lokasi dekat kampus,food,risky,0
+Ayam goreng lama,Ditinggal terbuka dari kemarin,food,risky,0
+Makanan basah pickup cepat,Kemasan bocor dan berbau prioritas ambil hari ini,food,risky,0
+Paket salad area kampus,Disimpan dingin dan harus pickup cepat lokasi dekat kampus,food,safe,2
+Telur ayam pickup cepat,Baru beli dari supermarket hari ini prioritas ambil hari ini,food,safe,4
+Pisau dapur area kampus,Alat dapur perlu diasah ulang lokasi dekat kampus,non_food,safe,0
+Tas thermal,Cooler bag untuk makanan,non_food,safe,0
+Telur ayam area kampus,Baru beli dari supermarket hari ini lokasi dekat kampus,food,safe,4
+Nasi kemarin,Sudah dari kemarin malam agak bau,food,risky,1
+Nasi box event area kampus,Baru dibagikan siang ini kemasan tertutup lokasi dekat kampus,food,safe,4
+Botol minum area kampus,Reusable bottle bersih tanpa retak lokasi dekat kampus,non_food,safe,0
+Daging mentah area kampus,Raw food tanpa pendingin dari pagi lokasi dekat kampus,food,risky,0
+Buku catatan aesthetic,Beberapa halaman pertama terpakai,non_food,safe,0
+Wanted tote bag,Cari tote bag belanja tanpa plastik,non_food,safe,0
+Kue ulang tahun,Masih di box dan disimpan kulkas,food,safe,5
+Buku resep,Buku masak untuk pemula,non_food,safe,0
+Sendok garpu pickup cepat,Set alat makan stainless prioritas ambil hari ini,non_food,safe,0
+Paket buah fresh,Apel jeruk masih fresh dan bersih,food,safe,3
+Nasi kemarin area kampus,Sudah dari kemarin malam agak bau lokasi dekat kampus,food,risky,1
+Snack kemasan area kampus,Expired masih lama kemasan belum dibuka lokasi dekat kampus,food,safe,2
+Paket lauk matang,Ayam tempe sayur baru selesai dimasak,food,safe,4
+Katering vegetarian area kampus,Baru datang masih di wadah tertutup lokasi dekat kampus,food,safe,5
+Roti berjamur,Ada jamur di pinggir kemasan,food,risky,0
+Makanan basah area kampus,Kemasan bocor dan berbau lokasi dekat kampus,food,risky,0
+Susu UHT kotak pickup cepat,Belum dibuka tanggal masih aman prioritas ambil hari ini,food,safe,2
+Sambal rumahan pickup cepat,Sudah satu minggu tidak masuk kulkas prioritas ambil hari ini,food,risky,0
+Tas thermal area kampus,Cooler bag untuk makanan lokasi dekat kampus,non_food,safe,0
+Tote bag polos,Tas belanja kain masih bagus,non_food,safe,0
+Piring keramik area kampus,Barang rumah tangga bekas layak pakai lokasi dekat kampus,non_food,safe,0
+Kardus pindahan,Box bersih bisa dipakai ulang,non_food,safe,0
+Roti berjamur area kampus,Ada jamur di pinggir kemasan lokasi dekat kampus,food,risky,0
+Roti gandum pickup cepat,Baru dibeli dan kemasan utuh prioritas ambil hari ini,food,safe,3
+Kopi sachet pickup cepat,Kemasan masih rapi dan belum expired prioritas ambil hari ini,food,safe,1
+Lunch box reusable pickup cepat,Bersih jarang dipakai cocok meal prep prioritas ambil hari ini,non_food,safe,0
+Buah pisang,Matang hari ini cocok segera dimakan,food,safe,3
+Forum tips kompos pickup cepat,Diskusi cara mengolah sampah organik prioritas ambil hari ini,non_food,safe,0
+Buku resep pickup cepat,Buku masak untuk pemula prioritas ambil hari ini,non_food,safe,0
+Komposter mini area kampus,Alat kompos rumahan masih jalan lokasi dekat kampus,non_food,safe,0
+Forum tips kompos area kampus,Diskusi cara mengolah sampah organik lokasi dekat kampus,non_food,safe,0
+Stoples kaca,Jar bekas selai sudah dicuci,non_food,safe,0
+Kue ulang tahun area kampus,Masih di box dan disimpan kulkas lokasi dekat kampus,food,safe,5
+Kue basi pickup cepat,Tercium bau asam dan tekstur berubah prioritas ambil hari ini,food,risky,0
+Kue ulang tahun pickup cepat,Masih di box dan disimpan kulkas prioritas ambil hari ini,food,safe,5
+Rak kecil,Rak dapur minimalis masih kokoh,non_food,safe,0
+Tas thermal pickup cepat,Cooler bag untuk makanan prioritas ambil hari ini,non_food,safe,0
+Paket sembako mini area kampus,Beras mie minyak kemasan baru lokasi dekat kampus,food,safe,6
+Rak kecil pickup cepat,Rak dapur minimalis masih kokoh prioritas ambil hari ini,non_food,safe,0
+Snack kemasan pickup cepat,Expired masih lama kemasan belum dibuka prioritas ambil hari ini,food,safe,2
+Ikan mentah,Tidak ada es dan bau amis kuat,food,risky,0
+Roti sobek pickup cepat,Masih lembut dibuat pagi ini prioritas ambil hari ini,food,safe,3
+Susu UHT kotak,Belum dibuka tanggal masih aman,food,safe,2
+Donat box area kampus,Sisa meeting pagi kemasan bersih lokasi dekat kampus,food,safe,4
+Roti gandum,Baru dibeli dan kemasan utuh,food,safe,3
+Nasi kemarin pickup cepat,Sudah dari kemarin malam agak bau prioritas ambil hari ini,food,risky,1
+Buah pisang area kampus,Matang hari ini cocok segera dimakan lokasi dekat kampus,food,safe,3
+Wanted tote bag area kampus,Cari tote bag belanja tanpa plastik lokasi dekat kampus,non_food,safe,0
+Pisau dapur,Alat dapur perlu diasah ulang,non_food,safe,0
+Stoples kaca pickup cepat,Jar bekas selai sudah dicuci prioritas ambil hari ini,non_food,safe,0
+Paket salad pickup cepat,Disimpan dingin dan harus pickup cepat prioritas ambil hari ini,food,safe,2
+Sambal rumahan area kampus,Sudah satu minggu tidak masuk kulkas lokasi dekat kampus,food,risky,0
+Botol minum pickup cepat,Reusable bottle bersih tanpa retak prioritas ambil hari ini,non_food,safe,0
+Telur ayam,Baru beli dari supermarket hari ini,food,safe,4
+Sendok garpu area kampus,Set alat makan stainless lokasi dekat kampus,non_food,safe,0
+Katering vegetarian pickup cepat,Baru datang masih di wadah tertutup prioritas ambil hari ini,food,safe,5
+Kue basi area kampus,Tercium bau asam dan tekstur berubah lokasi dekat kampus,food,risky,0
+Buku catatan aesthetic area kampus,Beberapa halaman pertama terpakai lokasi dekat kampus,non_food,safe,0
+Piring keramik,Barang rumah tangga bekas layak pakai,non_food,safe,0
+Wadah kaca area kampus,Container makanan kaca masih aman lokasi dekat kampus,non_food,safe,0
+Wadah kaca pickup cepat,Container makanan kaca masih aman prioritas ambil hari ini,non_food,safe,0
+Paket sembako mini pickup cepat,Beras mie minyak kemasan baru prioritas ambil hari ini,food,safe,6
+Pisau dapur pickup cepat,Alat dapur perlu diasah ulang prioritas ambil hari ini,non_food,safe,0
+Nasi box event pickup cepat,Baru dibagikan siang ini kemasan tertutup prioritas ambil hari ini,food,safe,4
+Botol minum,Reusable bottle bersih tanpa retak,non_food,safe,0
+Buku resep area kampus,Buku masak untuk pemula lokasi dekat kampus,non_food,safe,0
+Ayam goreng lama pickup cepat,Ditinggal terbuka dari kemarin prioritas ambil hari ini,food,risky,0
+Buah pisang pickup cepat,Matang hari ini cocok segera dimakan prioritas ambil hari ini,food,safe,3
+Bento ayam matang,Masakan hari ini jam 12 kemasan tertutup,food,safe,2
+Sup sisa,Tersimpan suhu ruang lebih dari semalam,food,risky,0
+Snack kemasan,Expired masih lama kemasan belum dibuka,food,safe,2
+Roti tawar sealed area kampus,Masih segel beli kemarin malam pickup hari ini lokasi dekat kampus,food,safe,3
+Mie instan area kampus,Kemasan utuh exp tahun depan lokasi dekat kampus,food,safe,2
+Donat box pickup cepat,Sisa meeting pagi kemasan bersih prioritas ambil hari ini,food,safe,4
+Rak kecil area kampus,Rak dapur minimalis masih kokoh lokasi dekat kampus,non_food,safe,0
+Sayur organik pickup cepat,Sisa belanja pagi masih segar belum dimasak prioritas ambil hari ini,food,safe,3
+Sambal rumahan,Sudah satu minggu tidak masuk kulkas,food,risky,0
+Paket salad,Disimpan dingin dan harus pickup cepat,food,safe,2
+Ayam goreng lama area kampus,Ditinggal terbuka dari kemarin lokasi dekat kampus,food,risky,0
+Daging mentah,Raw food tanpa pendingin dari pagi,food,risky,0
+Bento ayam matang pickup cepat,Masakan hari ini jam 12 kemasan tertutup prioritas ambil hari ini,food,safe,2
+Bubur kacang hijau,Dimasak pagi dan masih hangat,food,safe,3
+Sup sisa pickup cepat,Tersimpan suhu ruang lebih dari semalam prioritas ambil hari ini,food,risky,0
+Buah busuk pickup cepat,Ada bagian hitam lembek dan bau prioritas ambil hari ini,food,risky,0
+Susu terbuka,Sudah dibuka dua hari di suhu ruang,food,risky,0
+Paket sembako mini,Beras mie minyak kemasan baru,food,safe,6
+Paket buah fresh area kampus,Apel jeruk masih fresh dan bersih lokasi dekat kampus,food,safe,3
+Piring keramik pickup cepat,Barang rumah tangga bekas layak pakai prioritas ambil hari ini,non_food,safe,0
+Roti sobek,Masih lembut dibuat pagi ini,food,safe,3
+Roti berjamur pickup cepat,Ada jamur di pinggir kemasan prioritas ambil hari ini,food,risky,0
+Makanan expired,Tanggal kadaluarsa sudah lewat,food,risky,0
+Kardus pindahan pickup cepat,Box bersih bisa dipakai ulang prioritas ambil hari ini,non_food,safe,0
+Katering vegetarian,Baru datang masih di wadah tertutup,food,safe,5
+Mie instan,Kemasan utuh exp tahun depan,food,safe,2
+Sayur layu pickup cepat,Warna berubah dan tekstur lembek prioritas ambil hari ini,food,risky,1
+Wadah kaca,Container makanan kaca masih aman,non_food,safe,0
+Kopi sachet area kampus,Kemasan masih rapi dan belum expired lokasi dekat kampus,food,safe,1

@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecoshare_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecoshare
+      POSTGRES_PASSWORD: ecoshare_password
+      POSTGRES_DB: ecoshare_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecoshare_pgdata:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecoshare -d ecoshare_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    container_name: ecoshare_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://ecoshare:ecoshare_password@postgres:5432/ecoshare_db
+      AUTH_SECRET: dev_secret_change_me
+      PUBLIC_BASE_URL: http://10.118.69.4:3000
+      CORS_ORIGIN: "*"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ecoshare_uploads:/app/uploads
+
+volumes:
+  ecoshare_pgdata:
+  ecoshare_uploads:

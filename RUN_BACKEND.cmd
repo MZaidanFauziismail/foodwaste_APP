@@ -1,0 +1,3 @@
+@echo off
+echo Starting PostgreSQL + ExpressJS backend...
+docker compose up --build

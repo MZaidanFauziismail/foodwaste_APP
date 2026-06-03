@@ -1,0 +1,30 @@
+{
+  "dataset": "training_data.csv",
+  "train_rows": 120,
+  "validation_rows": 30,
+  "category": {
+    "accuracy": 1.0,
+    "n": 30,
+    "confusion_matrix": {
+      "non_food": {
+        "non_food": 10
+      },
+      "food": {
+        "food": 20
+      }
+    }
+  },
+  "safety": {
+    "accuracy": 1.0,
+    "n": 30,
+    "confusion_matrix": {
+      "safe": {
+        "safe": 21
+      },
+      "risky": {
+        "risky": 9
+      }
+    }
+  },
+  "note": "Metrics are calculated on the included labeled sample. For production accuracy, retrain with real EcoShare transaction/listing moderation data."
+}
