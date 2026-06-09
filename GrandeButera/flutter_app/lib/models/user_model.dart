@@ -1,5 +1,3 @@
-import '../services/api_config.dart';
-
 class UserModel {
   final String id;
   final String name;
@@ -43,7 +41,7 @@ class UserModel {
   String get avatarUrl {
     if (avatar == null) return '';
     if (avatar!.startsWith('http') || avatar!.startsWith('file://')) return avatar!;
-    if (avatar!.startsWith('/uploads')) return '${ApiConfig.serverBaseUrl}$avatar';
+    if (avatar!.startsWith('/uploads')) return 'http://10.0.2.2:3000$avatar';
     if (avatar!.startsWith('/')) return 'file://$avatar';
     return avatar!;
   }

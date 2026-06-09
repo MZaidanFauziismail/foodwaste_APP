@@ -1,5 +1,4 @@
 import 'user_model.dart';
-import '../services/api_config.dart';
 
 class ListingModel {
   final String id;
@@ -86,7 +85,7 @@ class ListingModel {
 
   String _resolveImageUrl(String img) {
     if (img.startsWith('http') || img.startsWith('file://')) return img;
-    if (img.startsWith('/uploads')) return '${ApiConfig.serverBaseUrl}$img';
+    if (img.startsWith('/uploads')) return 'http://10.0.2.2:3000$img';
     if (img.startsWith('/')) return 'file://$img';
     if (RegExp(r'^[A-Za-z]:\\').hasMatch(img)) return 'file:///${img.replaceAll('\\', '/')}';
     return img;
@@ -128,7 +127,7 @@ class ListingOwner {
   String get avatarUrl {
     if (avatar == null) return '';
     if (avatar!.startsWith('http') || avatar!.startsWith('file://')) return avatar!;
-    if (avatar!.startsWith('/uploads')) return '${ApiConfig.serverBaseUrl}$avatar';
+    if (avatar!.startsWith('/uploads')) return 'http://10.0.2.2:3000$avatar';
     if (avatar!.startsWith('/')) return 'file://$avatar';
     return avatar!;
   }

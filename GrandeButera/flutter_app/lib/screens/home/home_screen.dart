@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final user = context.watch<AuthProvider>().user;
 
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: RefreshIndicator(
         onRefresh: _fetchListings,
         color: AppTheme.primary,
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   position: _headerSlide,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: AppTheme.skyGradient(
+                      gradient: AppTheme.skyGradientFor(context,
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter),
                     ),
@@ -163,19 +163,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(_getGreeting(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontFamily: 'Nunito',
                                             fontSize: 13,
-                                            color: AppTheme.textSecondary,
+                                            color: AppTheme.txtSecondary(context),
                                             fontWeight: FontWeight.w500)),
                                     const SizedBox(height: 2),
                                     Text(
                                       user?.name.split(' ').first ?? 'there',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontFamily: 'Nunito',
                                           fontSize: 24,
                                           fontWeight: FontWeight.w800,
-                                          color: AppTheme.textPrimary),
+                                          color: AppTheme.txtPrimary(context)),
                                     ),
                                   ],
                                 ),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       _bellCtrl.forward(from: 0);
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                          content: const Text('No new notifications right now 🔔'),
+                                          content: Text('No new notifications right now 🔔'),
                                           backgroundColor: AppTheme.primary,
                                           behavior: SnackBarBehavior.floating,
                                           shape: RoundedRectangleBorder(
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         gradient: AppTheme.primaryGradient(),
                                         borderRadius: BorderRadius.circular(14),
                                       ),
-                                      child: const Icon(Icons.notifications_outlined,
+                                      child: Icon(Icons.notifications_outlined,
                                           color: Colors.white, size: 22),
                                     ),
                                   ),
@@ -286,13 +286,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Text('Share food,',
+                                      Text('Share food,',
                                           style: TextStyle(
                                               fontFamily: 'Nunito',
                                               color: Colors.white,
                                               fontSize: 20,
                                               fontWeight: FontWeight.w800)),
-                                      const Text('share love',
+                                      Text('share love',
                                           style: TextStyle(
                                               fontFamily: 'Nunito',
                                               color: Colors.white,
@@ -356,11 +356,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Expanded(
                         child: Text(
                           _position != null ? 'Near you' : 'All listings',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Nunito',
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: AppTheme.textPrimary),
+                              color: AppTheme.txtPrimary(context)),
                         ),
                       ),
                       AnimatedSwitcher(
@@ -368,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         child: Text(
                           '${_listings.length} items',
                           key: ValueKey(_listings.length),
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Nunito',
                               fontSize: 13,
                               color: AppTheme.primary,
@@ -465,24 +465,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             decoration: BoxDecoration(
                 color: AppTheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle),
-            child: const Icon(Icons.search_off_rounded,
+            child: Icon(Icons.search_off_rounded,
                 color: AppTheme.primary, size: 36),
           ),
         ),
         const SizedBox(height: 20),
-        const Text('Nothing here yet',
+        Text('Nothing here yet',
             style: TextStyle(
                 fontFamily: 'Nunito',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: AppTheme.textPrimary)),
+                color: AppTheme.txtPrimary(context))),
         const SizedBox(height: 8),
         Text(
           'Try expanding your search radius or changing the filter',
           style: TextStyle(
               fontFamily: 'Nunito',
               fontSize: 13,
-              color: AppTheme.textSecondary,
+              color: AppTheme.txtSecondary(context),
               height: 1.5),
           textAlign: TextAlign.center,
         ),
@@ -722,11 +722,15 @@ class _ShimmerCardState extends State<_ShimmerCard>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _shimmer,
-      builder: (_, __) {
+      builder: (context, __) {
         final c = Color.lerp(const Color(0xFFE8F4FF), const Color(0xFFC8E0F4), _shimmer.value)!;
+        final isDark = AppTheme.isDark(context);
+        final cardBg = isDark
+            ? Color.lerp(AppTheme.surfaceDark, AppTheme.cardDark, _shimmer.value)!
+            : Colors.white;
         return Container(
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              color: cardBg, borderRadius: BorderRadius.circular(20)),
           child: Column(children: [
             Expanded(
                 flex: 6,

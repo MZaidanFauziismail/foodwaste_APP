@@ -259,14 +259,14 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
         l.firstImageUrl.isNotEmpty ? l.firstImageUrl : getFallbackImage(l);
 
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: CustomScrollView(
         slivers: [
           // Collapsible image header
           SliverAppBar(
             expandedHeight: 300,
             pinned: true,
-            backgroundColor: Colors.white,
+            backgroundColor: AppTheme.surface(context),
             leading: _CircleBackButton(),
             actions: [
               // Animated save button
@@ -283,7 +283,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                         _saveCtrl.forward(from: 0);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(_isSaved ? 'Saved to favorites!' : 'Removed from favorites'),
-                          backgroundColor: _isSaved ? AppTheme.primary : AppTheme.textSecondary,
+                          backgroundColor: _isSaved ? AppTheme.primary : AppTheme.txtSecondary(context),
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           margin: const EdgeInsets.all(16),
@@ -294,7 +294,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                         width: 38,
                         height: 38,
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppTheme.surface(context),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
@@ -306,7 +306,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                           child: Icon(
                             _isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
                             key: ValueKey(_isSaved),
-                            color: _isSaved ? AppTheme.primary : AppTheme.textSecondary,
+                            color: _isSaved ? AppTheme.primary : AppTheme.txtSecondary(context),
                             size: 20,
                           ),
                         ),
@@ -402,16 +402,16 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                             style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 12,
-                                color: AppTheme.textSecondary)),
+                                color: AppTheme.txtSecondary(context))),
                       ]),
 
                       const SizedBox(height: 12),
                       Text(l.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Nunito',
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
-                              color: AppTheme.textPrimary,
+                              color: AppTheme.txtPrimary(context),
                               height: 1.2)),
                       const SizedBox(height: 10),
                       Row(children: [
@@ -433,7 +433,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                               l.isFree
                                   ? 'FREE'
                                   : 'Rp ${l.price.toStringAsFixed(0)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontFamily: 'Nunito',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w800,
@@ -447,7 +447,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                               style: TextStyle(
                                   fontFamily: 'Nunito',
                                   fontSize: 13,
-                                  color: AppTheme.textSecondary)),
+                                  color: AppTheme.txtSecondary(context))),
                         ],
                       ]),
 
@@ -471,12 +471,12 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
 
                       if (l.description.isNotEmpty) ...[
                         const SizedBox(height: 20),
-                        const Text('About this item',
+                        Text('About this item',
                             style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 17,
                                 fontWeight: FontWeight.w800,
-                                color: AppTheme.textPrimary)),
+                                color: AppTheme.txtPrimary(context))),
                         const SizedBox(height: 8),
                         _ExpandableText(text: l.description),
                       ],
@@ -538,9 +538,9 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.card(context),
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppTheme.divider),
+          border: Border.all(color: AppTheme.div(context)),
         ),
         child: Row(children: [
           CircleAvatar(
@@ -552,7 +552,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                     (l.owner?.name.isNotEmpty == true
                         ? l.owner!.name.substring(0, 1).toUpperCase()
                         : '?'),
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
                         color: AppTheme.primary))
@@ -562,23 +562,23 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
           Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(l.owner?.name ?? 'Unknown',
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
-                    color: AppTheme.textPrimary)),
+                    color: AppTheme.txtPrimary(context))),
             Text('${l.owner?.stats?.totalShared ?? 0} items shared',
                 style: TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 12,
-                    color: AppTheme.textSecondary)),
+                    color: AppTheme.txtSecondary(context))),
           ])),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
                 border: Border.all(color: AppTheme.primary),
                 borderRadius: BorderRadius.circular(12)),
-            child: const Text('View profile',
+            child: Text('View profile',
                 style: TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 12,
@@ -643,17 +643,17 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF8E7),
+              color: AppTheme.isDark(context) ? const Color(0xFF2A2010) : const Color(0xFFFFF8E7),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: const Color(0xFFFFE0A0)),
             ),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Icon(Icons.lightbulb_outline_rounded,
+              Icon(Icons.lightbulb_outline_rounded,
                   color: Color(0xFFFFB300), size: 20),
               const SizedBox(width: 10),
               Expanded(
                   child: Text(tips.first,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 13,
                           height: 1.5,
@@ -719,7 +719,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                   width: 130,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.card(context),
                       borderRadius: BorderRadius.circular(16)),
                   clipBehavior: Clip.antiAlias,
                   child: Column(children: [
@@ -727,11 +727,11 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
                     Padding(
                         padding: const EdgeInsets.all(8),
                         child: Text(item.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: AppTheme.textPrimary),
+                                color: AppTheme.txtPrimary(context)),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis)),
                   ]),
@@ -757,27 +757,27 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(height: 4),
         Text(text,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: 'Nunito',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary)),
+                color: AppTheme.txtPrimary(context))),
         if (sub != null)
           Text(sub,
               style: TextStyle(
                   fontFamily: 'Nunito',
                   fontSize: 12,
-                  color: AppTheme.textSecondary)),
+                  color: AppTheme.txtSecondary(context))),
       ])),
     ]);
   }
 
   Widget _sectionTitle(String t) => Text(t,
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'Nunito',
           fontSize: 17,
           fontWeight: FontWeight.w800,
-          color: AppTheme.textPrimary));
+          color: AppTheme.txtPrimary(context)));
 
   Widget _chip(String label, Color color) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -797,7 +797,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surface(context),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.06),
@@ -813,7 +813,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
             decoration: BoxDecoration(
                 border: Border.all(color: AppTheme.primary.withOpacity(0.4)),
                 borderRadius: BorderRadius.circular(14)),
-            child: const Icon(Icons.chat_bubble_outline_rounded,
+            child: Icon(Icons.chat_bubble_outline_rounded,
                 color: AppTheme.primary, size: 22),
           ),
         ),
@@ -843,14 +843,14 @@ class _CircleBackButton extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.surface(context),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8)
             ],
           ),
-          child: const Icon(Icons.arrow_back_ios_new_rounded,
-              size: 16, color: AppTheme.textPrimary),
+          child: Icon(Icons.arrow_back_ios_new_rounded,
+              size: 16, color: AppTheme.txtPrimary(context)),
         ),
       ),
     );
@@ -946,7 +946,7 @@ class _GradientActionButtonState extends State<_GradientActionButton>
           ),
           child: Center(
             child: Text(widget.label,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
@@ -1003,9 +1003,9 @@ class _AnimatedIdeaCardState extends State<_AnimatedIdeaCard>
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.card(context),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.divider),
+              border: Border.all(color: AppTheme.div(context)),
             ),
             child: Row(children: [
               Container(
@@ -1014,31 +1014,31 @@ class _AnimatedIdeaCardState extends State<_AnimatedIdeaCard>
                   decoration: BoxDecoration(
                       color: AppTheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12)),
-                  child: const Icon(Icons.restaurant_outlined,
+                  child: Icon(Icons.restaurant_outlined,
                       color: AppTheme.primary, size: 22)),
               const SizedBox(width: 14),
               Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text((widget.idea['title'] ?? 'Recipe idea').toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
-                        color: AppTheme.textPrimary)),
+                        color: AppTheme.txtPrimary(context))),
                 const SizedBox(height: 2),
                 Text(
                     '${widget.idea['difficulty'] ?? 'Easy'} • ${widget.idea['time'] ?? '15-25 min'}',
                     style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 11,
-                        color: AppTheme.textSecondary)),
+                        color: AppTheme.txtSecondary(context))),
               ])),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                       color: AppTheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8)),
-                  child: const Text('View recipe',
+                  child: Text('View recipe',
                       style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 11,
@@ -1144,13 +1144,13 @@ class _AnimatedTagState extends State<_AnimatedTag>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-              color: const Color(0xFFF0EFF8),
+              color: AppTheme.inputFill2(context),
               borderRadius: BorderRadius.circular(20)),
           child: Text('#${widget.tag}',
               style: TextStyle(
                   fontFamily: 'Nunito',
                   fontSize: 12,
-                  color: AppTheme.textSecondary,
+                  color: AppTheme.txtSecondary(context),
                   fontWeight: FontWeight.w600)),
         ),
       ),
@@ -1179,13 +1179,13 @@ class _ExpandableTextState extends State<_ExpandableText> {
         AnimatedCrossFade(
           firstChild: Text(
             widget.text,
-            style: TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.textSecondary, height: 1.6),
+            style: TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.txtSecondary(context), height: 1.6),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
           secondChild: Text(
             widget.text,
-            style: TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.textSecondary, height: 1.6),
+            style: TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.txtSecondary(context), height: 1.6),
           ),
           crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 300),
@@ -1197,7 +1197,7 @@ class _ExpandableTextState extends State<_ExpandableText> {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 _expanded ? 'Show less' : 'Read more',
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -1272,8 +1272,8 @@ class _RecipeSheet extends StatelessWidget {
       minChildSize: 0.45,
       maxChildSize: 0.92,
       builder: (_, controller) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: AppTheme.sheet(context),
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
         child: ListView(
@@ -1300,32 +1300,32 @@ class _RecipeSheet extends StatelessWidget {
               Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(recipe['title'].toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
-                        color: AppTheme.textPrimary)),
+                        color: AppTheme.txtPrimary(context))),
                 const SizedBox(height: 3),
                 Text('${recipe['difficulty']} • ${recipe['time']}',
                     style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 12,
-                        color: AppTheme.textSecondary)),
+                        color: AppTheme.txtSecondary(context))),
               ])),
             ]),
             const SizedBox(height: 22),
-            _title('Ingredients'),
+            _title(context, 'Ingredients'),
             const SizedBox(height: 10),
-            ...ingredients.map((i) => _bullet(i)),
+            ...ingredients.map((i) => _bullet(context, i)),
             const SizedBox(height: 18),
-            _title('Steps'),
+            _title(context, 'Steps'),
             const SizedBox(height: 10),
-            ...List.generate(steps.length, (i) => _step(i + 1, steps[i], color)),
+            ...List.generate(steps.length, (i) => _step(context, i + 1, steps[i], color)),
             if (tips.isNotEmpty) ...[
               const SizedBox(height: 18),
-              _title('Safety tips'),
+              _title(context, 'Safety tips'),
               const SizedBox(height: 10),
-              ...tips.map((t) => _bullet(t)),
+              ...tips.map((t) => _bullet(context, t)),
             ],
           ],
         ),
@@ -1333,32 +1333,32 @@ class _RecipeSheet extends StatelessWidget {
     );
   }
 
-  Widget _title(String text) => Text(text,
-      style: const TextStyle(
+  Widget _title(BuildContext context, String text) => Text(text,
+      style: TextStyle(
           fontFamily: 'Nunito',
           fontSize: 16,
           fontWeight: FontWeight.w800,
-          color: AppTheme.textPrimary));
+          color: AppTheme.txtPrimary(context)));
 
-  Widget _bullet(String text) => Padding(
+  Widget _bullet(BuildContext context, String text) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('•  ',
+          Text('•  ',
               style: TextStyle(
                   fontFamily: 'Nunito',
                   fontSize: 14,
-                  color: AppTheme.textPrimary)),
+                  color: AppTheme.txtPrimary(context))),
           Expanded(
               child: Text(text,
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 14,
                       height: 1.45,
-                      color: AppTheme.textSecondary))),
+                      color: AppTheme.txtSecondary(context)))),
         ]),
       );
 
-  Widget _step(int no, String text, Color color) => Padding(
+  Widget _step(BuildContext context, int no, String text, Color color) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -1380,7 +1380,7 @@ class _RecipeSheet extends StatelessWidget {
                       fontFamily: 'Nunito',
                       fontSize: 14,
                       height: 1.45,
-                      color: AppTheme.textSecondary))),
+                      color: AppTheme.txtSecondary(context)))),
         ]),
       );
 }
@@ -1445,9 +1445,9 @@ class _MessageSheetState extends State<_MessageSheet> {
     return Container(
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      decoration: BoxDecoration(
+          color: AppTheme.sheet(context),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         child: Column(
@@ -1462,24 +1462,24 @@ class _MessageSheetState extends State<_MessageSheet> {
                           color: Colors.grey.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 20),
-              const Text('Message owner',
+              Text('Message owner',
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.textPrimary)),
+                      color: AppTheme.txtPrimary(context))),
               const SizedBox(height: 14),
               TextField(
                 controller: _ctrl,
                 maxLines: 4,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 14,
-                    color: AppTheme.textPrimary),
+                    color: AppTheme.txtPrimary(context)),
                 decoration: InputDecoration(
                   hintText: 'Write a message...',
                   filled: true,
-                  fillColor: const Color(0xFFF0EFF8),
+                  fillColor: AppTheme.inputFill2(context),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
                       borderSide: BorderSide.none),
@@ -1519,7 +1519,7 @@ class _RequestSheetState extends State<_RequestSheet> {
         final messenger = ScaffoldMessenger.of(context);
         Navigator.pop(context);
         messenger.showSnackBar(SnackBar(
-          content: const Text('Request sent successfully! 🎉'),
+          content: Text('Request sent successfully! 🎉'),
           backgroundColor: AppTheme.green,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -1543,9 +1543,9 @@ class _RequestSheetState extends State<_RequestSheet> {
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      decoration: BoxDecoration(
+          color: AppTheme.sheet(context),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         child: Column(
@@ -1560,21 +1560,21 @@ class _RequestSheetState extends State<_RequestSheet> {
                           color: Colors.grey.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 20),
-              const Text('Send a request',
+              Text('Send a request',
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.textPrimary)),
+                      color: AppTheme.txtPrimary(context))),
               const SizedBox(height: 16),
 
               if (widget.listing.quantity > 1) ...[
-                const Text('Quantity',
+                Text('Quantity',
                     style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary)),
+                        color: AppTheme.txtPrimary(context))),
                 const SizedBox(height: 8),
                 Row(children: [
                   _AnimatedQtyBtn(
@@ -1590,7 +1590,7 @@ class _RequestSheetState extends State<_RequestSheet> {
                         scale: anim, child: child),
                     child: Text('$_qty',
                         key: ValueKey(_qty),
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Nunito',
                             fontSize: 20,
                             fontWeight: FontWeight.w800)),
@@ -1607,28 +1607,28 @@ class _RequestSheetState extends State<_RequestSheet> {
                 const SizedBox(height: 16),
               ],
 
-              const Text('Message (optional)',
+              Text('Message (optional)',
                   style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary)),
+                      color: AppTheme.txtPrimary(context))),
               const SizedBox(height: 8),
               TextField(
                   controller: _msgCtrl,
                   maxLines: 3,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 14,
-                      color: AppTheme.textPrimary),
+                      color: AppTheme.txtPrimary(context)),
                   decoration: InputDecoration(
                     hintText: 'Hi, I would love to have this!',
                     hintStyle: TextStyle(
                         fontFamily: 'Nunito',
-                        color: AppTheme.textSecondary.withOpacity(0.7),
+                        color: AppTheme.txtSecondary(context).withOpacity(0.7),
                         fontSize: 14),
                     filled: true,
-                    fillColor: const Color(0xFFF0EFF8),
+                    fillColor: AppTheme.inputFill2(context),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none),
