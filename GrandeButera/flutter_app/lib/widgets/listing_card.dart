@@ -337,7 +337,9 @@ class _BookmarkButtonState extends State<_BookmarkButton>
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.92),
+              color: AppTheme.isDark(context)
+                  ? AppTheme.inputDark.withOpacity(0.92)
+                  : Colors.white.withOpacity(0.92),
               shape: BoxShape.circle,
             ),
             child: AnimatedSwitcher(
@@ -346,7 +348,9 @@ class _BookmarkButtonState extends State<_BookmarkButton>
                 widget.saved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
                 key: ValueKey(widget.saved),
                 size: 15,
-                color: widget.saved ? AppTheme.primary : Colors.grey,
+                color: widget.saved
+                    ? AppTheme.primary
+                    : AppTheme.txtSecondary(context),
               ),
             ),
           ),

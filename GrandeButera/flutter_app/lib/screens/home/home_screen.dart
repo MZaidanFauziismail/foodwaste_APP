@@ -577,7 +577,9 @@ class _HeroPulseButtonState extends State<_HeroPulseButton>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.92),
+                color: AppTheme.isDark(context)
+                    ? AppTheme.inputDark.withOpacity(0.92)
+                    : Colors.white.withOpacity(0.92),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                     color: AppTheme.primary.withOpacity(0.45), width: 1.5),

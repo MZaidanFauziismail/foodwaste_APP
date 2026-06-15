@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
-import '../../services/api_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/gradient_button.dart';
 
@@ -54,30 +53,16 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  Future<void> _loginDemo() async {
-    final auth = context.read<AuthProvider>();
-    final ok = await auth.login(ApiService.demoEmail, ApiService.demoPassword);
-    if (ok && mounted) {
-      Navigator.pushReplacementNamed(context, '/main');
-    } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(auth.error ?? 'Demo login failed'),
-        backgroundColor: AppTheme.secondary,
-        margin: const EdgeInsets.all(16),
-      ));
-    }
-  }
-
   void _showForgotPasswordInfo() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Forgot password?'),
-        content: const Text(
-          'For this local ShareBite build, use the Demo / Offline login when the backend is not running. If you use your own backend account, reset password from the backend/admin database.',
+        title: Text('Forgot password?'),
+        content: Text(
+          'Please use your registered account. If you forgot your password, reset it from the backend/admin database or contact the system administrator.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('OK')),
         ],
       ),
     );
@@ -86,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: FadeTransition(
         opacity: _fadeAnim,
         child: SafeArea(
@@ -99,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
+                    Center(
                       child: Text(
                         'Welcome back!',
                         textAlign: TextAlign.center,
@@ -107,19 +92,19 @@ class _LoginScreenState extends State<LoginScreen>
                           fontFamily: 'Nunito',
                           fontSize: 28,
                           fontWeight: FontWeight.w900,
-                          color: AppTheme.textPrimary,
+                          color: AppTheme.txtPrimary(context),
                         ),
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Center(
+                    Center(
                       child: Text(
                         'Sign in to continue',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 15,
-                          color: AppTheme.textSecondary,
+                          color: AppTheme.txtSecondary(context),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -131,13 +116,13 @@ class _LoginScreenState extends State<LoginScreen>
                     TextFormField(
                       controller: _emailCtrl,
                       keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: AppTheme.txtPrimary(context),
                       ),
-                      decoration: _inputDeco('you@email.com', Icons.email_outlined),
+                      decoration: _inputDeco(context, 'you@email.com', Icons.email_outlined),
                       validator: (v) => v == null || v.isEmpty ? 'Email is required' : null,
                     ),
                     const SizedBox(height: 20),
@@ -147,17 +132,17 @@ class _LoginScreenState extends State<LoginScreen>
                     TextFormField(
                       controller: _passCtrl,
                       obscureText: _obscure,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: AppTheme.txtPrimary(context),
                       ),
-                      decoration: _inputDeco('Your password', Icons.lock_outline_rounded).copyWith(
+                      decoration: _inputDeco(context, 'Your password', Icons.lock_outline_rounded).copyWith(
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: AppTheme.textSecondary,
+                            color: AppTheme.txtSecondary(context),
                             size: 20,
                           ),
                           onPressed: () => setState(() => _obscure = !_obscure),
@@ -170,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen>
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: _showForgotPasswordInfo,
-                        child: const Text(
+                        child: Text(
                           'Forgot password?',
                           style: TextStyle(
                             fontFamily: 'Nunito',
@@ -194,29 +179,6 @@ class _LoginScreenState extends State<LoginScreen>
                               onPressed: auth.isLoading ? null : _login,
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: OutlinedButton.icon(
-                              onPressed: auth.isLoading ? null : _loginDemo,
-                              icon: const Icon(Icons.offline_bolt_outlined, size: 18),
-                              label: const Text('Masuk Demo / Offline'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppTheme.primary,
-                                backgroundColor: const Color(0xFFEAF6FF),
-                                side: const BorderSide(color: AppTheme.primary),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                textStyle: const TextStyle(
-                                  fontFamily: 'Nunito',
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -225,18 +187,18 @@ class _LoginScreenState extends State<LoginScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Don't have an account? ",
                           style: TextStyle(
                             fontFamily: 'Nunito',
-                            color: AppTheme.textSecondary,
+                            color: AppTheme.txtSecondary(context),
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pushReplacementNamed(context, '/register'),
-                          child: const Text(
+                          child: Text(
                             'Sign up',
                             style: TextStyle(
                               fontFamily: 'Nunito',
@@ -260,19 +222,19 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildLabel(String text) => Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Nunito',
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: AppTheme.textPrimary,
+          color: AppTheme.txtPrimary(context),
         ),
       );
 
-  InputDecoration _inputDeco(String hint, IconData icon) => InputDecoration(
+  InputDecoration _inputDeco(BuildContext context, String hint, IconData icon) => InputDecoration(
         hintText: hint,
-        prefixIcon: Icon(icon, color: AppTheme.textSecondary, size: 20),
+        prefixIcon: Icon(icon, color: AppTheme.txtSecondary(context), size: 20),
         filled: true,
-        fillColor: const Color(0xFFEAF6FF),
+        fillColor: AppTheme.inputFill(context),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,

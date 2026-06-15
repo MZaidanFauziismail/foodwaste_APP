@@ -7,7 +7,6 @@ import '../../services/api_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/listing_card.dart';
 import '../listing/listing_detail_screen.dart';
-import '../../services/api_config.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -69,7 +68,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String _resolveAvatar(String avatar) {
     if (avatar.isEmpty) return '';
     if (avatar.startsWith('http') || avatar.startsWith('file://')) return avatar;
-    if (avatar.startsWith('/uploads')) return '${ApiConfig.serverBaseUrl}$avatar';
+    if (avatar.startsWith('/uploads')) return 'https://foodwasteapp-production-6eaa.up.railway.app$avatar';
     if (avatar.startsWith('/')) return 'file://$avatar';
     return avatar;
   }
@@ -87,11 +86,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     final user = _user;
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       appBar: AppBar(
         title: Text(user?.name ?? widget.fallbackName),
-        backgroundColor: Colors.white,
-        foregroundColor: AppTheme.textPrimary,
+        backgroundColor: AppTheme.surface(context),
+        foregroundColor: AppTheme.txtPrimary(context),
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
@@ -110,11 +109,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
                       child: Row(children: [
-                        const Expanded(child: Text('Active listings', style: TextStyle(
+                        Expanded(child: Text('Active listings', style: TextStyle(
                           fontFamily: 'Nunito', fontSize: 18, fontWeight: FontWeight.w800,
-                          color: AppTheme.textPrimary,
+                          color: AppTheme.txtPrimary(context),
                         ))),
-                        Text('${_listings.length} items', style: const TextStyle(
+                        Text('${_listings.length} items', style: TextStyle(
                           fontFamily: 'Nunito', fontSize: 13, fontWeight: FontWeight.w700,
                           color: AppTheme.primary,
                         )),
@@ -125,7 +124,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(child: Text('No active listings yet', style: TextStyle(
-                        fontFamily: 'Nunito', color: AppTheme.textSecondary, fontSize: 14,
+                        fontFamily: 'Nunito', color: AppTheme.txtSecondary(context), fontSize: 14,
                       ))),
                     )
                   else
@@ -160,7 +159,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final avatar = user?.avatarUrl ?? widget.fallbackAvatar ?? '';
     return Container(
       width: double.infinity,
-      color: Colors.white,
+      color: AppTheme.surface(context),
       padding: const EdgeInsets.fromLTRB(20, 22, 20, 22),
       child: Column(children: [
         CircleAvatar(
@@ -168,7 +167,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           backgroundColor: AppTheme.primary.withOpacity(0.12),
           backgroundImage: _avatarProvider(avatar),
           child: avatar.isEmpty
-              ? Text(name.substring(0, 1).toUpperCase(), style: const TextStyle(
+              ? Text(name.substring(0, 1).toUpperCase(), style: TextStyle(
                   fontFamily: 'Nunito', fontSize: 30, fontWeight: FontWeight.w800,
                   color: AppTheme.primary,
                 ))
@@ -176,19 +175,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
         const SizedBox(height: 12),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Flexible(child: Text(name, style: const TextStyle(
+          Flexible(child: Text(name, style: TextStyle(
             fontFamily: 'Nunito', fontSize: 22, fontWeight: FontWeight.w800,
-            color: AppTheme.textPrimary,
+            color: AppTheme.txtPrimary(context),
           ), overflow: TextOverflow.ellipsis)),
           if (user?.isVerified == true) ...[
             const SizedBox(width: 6),
-            const Icon(Icons.verified_rounded, color: AppTheme.primary, size: 19),
+            Icon(Icons.verified_rounded, color: AppTheme.primary, size: 19),
           ],
         ]),
         if (user?.bio.isNotEmpty == true) ...[
           const SizedBox(height: 8),
           Text(user!.bio, textAlign: TextAlign.center, style: TextStyle(
-            fontFamily: 'Nunito', fontSize: 13, height: 1.5, color: AppTheme.textSecondary,
+            fontFamily: 'Nunito', fontSize: 13, height: 1.5, color: AppTheme.txtSecondary(context),
           )),
         ],
         const SizedBox(height: 18),
@@ -211,13 +210,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _stat(String value, String label) => Expanded(child: Column(children: [
-    Text(value, style: const TextStyle(
+    Text(value, style: TextStyle(
       fontFamily: 'Nunito', fontSize: 19, fontWeight: FontWeight.w800,
       color: AppTheme.primary,
     )),
     const SizedBox(height: 2),
     Text(label, textAlign: TextAlign.center, style: TextStyle(
-      fontFamily: 'Nunito', fontSize: 11, color: AppTheme.textSecondary,
+      fontFamily: 'Nunito', fontSize: 11, color: AppTheme.txtSecondary(context),
     )),
   ]));
 }
