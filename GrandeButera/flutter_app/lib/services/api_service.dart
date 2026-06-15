@@ -173,31 +173,30 @@ class ApiService {
 
   // ── ML ────────────────────────────────────────────────────────────────────
 
-static Future<Map<String, dynamic>> getRecommendations({
-  String? listingId,
-  String? title,
-  List<String>? tags,
-  String? category,
-  String? description,
-  double? price,
-  String? imageUrl,
-}) async {
-  final response = await http.post(
-    Uri.parse('$baseUrl/ml/recommend'),
-    headers: await _headers(),
-    body: jsonEncode({
-      'listingId': listingId,
-      'title': title,
-      'tags': tags,
-      'category': category,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
-    }),
-  );
-
-  return _handle(response);
-}
+  static Future<Map<String, dynamic>> getRecommendations({
+    String? listingId,
+    String? title,
+    List<String>? tags,
+    String? category,
+    String? description,
+    double? price,
+    String? imageUrl,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/ml/recommend'),
+      headers: await _headers(),
+      body: jsonEncode({
+        'listingId': listingId,
+        'title': title,
+        'tags': tags,
+        'category': category,
+        'description': description,
+        'price': price,
+        'imageUrl': imageUrl,
+      }),
+    );
+    return _handle(response);
+  }
 
   // ── MAPS ──────────────────────────────────────────────────────────────────
 

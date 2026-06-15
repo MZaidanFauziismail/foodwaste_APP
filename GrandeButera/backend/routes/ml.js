@@ -2,79 +2,177 @@ const express = require('express');
 
 const router = express.Router();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-
-function formatPrice(price) {
-  const n = Number(price || 0);
-
-  if (!n || n <= 0) {
-    return 'Free';
-  }
-
-  return `Rp ${n.toLocaleString('id-ID')}`;
+function cleanText(value) {
+  return String(value || '').trim();
 }
 
-function isFoodCategory(category = '') {
-  const c = String(category).toLowerCase();
-
-  return (
-    c.includes('food') &&
-    !c.includes('non-food') &&
-    !c.includes('nonfood')
-  );
+function asNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
 }
 
-function fallbackAnalyze({ title, description, category, price }) {
-  const text = `${title || ''} ${description || ''}`.toLowerCase();
-  const priceText = formatPrice(price);
-  const food = isFoodCategory(category);
+function formatRupiah(value) {
+  const n = asNumber(value);
+  if (n <= 0) return 'Free';
+  return `Rp ${Math.round(n).toLocaleString('id-ID')}`;
+}
 
-  if (food) {
-    return {
-      isFood: true,
-      itemType: 'food',
-      possibleBrand: null,
-      priceText,
-      insight:
-        priceText === 'Free'
-          ? 'Free food goes fast. Message the owner quickly and confirm pickup time.'
-          : `Food item listed for ${priceText}. Check freshness and pickup details.`,
-      cookingIdeas: [
-        {
-          title: 'Simple meal idea',
-          difficulty: 'Easy',
-          time: '20 mins',
-          emoji: '🍽️',
-        },
-      ],
-      itemIdeas: [],
-      tips: [
-        'Check freshness, packaging, and pickup time before claiming this food.',
-      ],
-    };
+function joinText(parts) {
+  return parts
+    .filter(Boolean)
+    .map((v) => String(v))
+    .join(' ')
+    .toLowerCase();
+}
+
+function detectItemType(text) {
+  if (/(tas|bag|backpack|ransel|pouch|totebag|sling bag)/i.test(text)) {
+    return 'bag';
+  }
+  if (/(dompet|wallet)/i.test(text)) {
+    return 'wallet';
+  }
+  if (/(baju|shirt|kaos|clothes|jaket|jacket)/i.test(text)) {
+    return 'clothing';
+  }
+  if (/(sepatu|shoes|sneaker)/i.test(text)) {
+    return 'shoes';
+  }
+  return 'item';
+}
+
+function detectFood(category, text) {
+  const all = `${category} ${text}`.toLowerCase();
+
+  const nonFoodKeywords = [
+    'free_nonfood',
+    'nonfood',
+    'non-food',
+    'tas',
+    'bag',
+    'backpack',
+    'ransel',
+    'pouch',
+    'dompet',
+    'wallet',
+    'baju',
+    'shirt',
+    'sepatu',
+    'shoes',
+  ];
+
+  if (nonFoodKeywords.some((keyword) => all.includes(keyword))) {
+    return false;
   }
 
-  let itemType = 'item';
-  let icon = '✨';
-  let titleText = 'Useful item';
+  const foodKeywords = [
+    'food',
+    'makanan',
+    'meal',
+    'rice',
+    'nasi',
+    'roti',
+    'bread',
+    'ayam',
+    'chicken',
+    'sayur',
+    'fruit',
+    'buah',
+    'snack',
+    'halal',
+    'leftover',
+  ];
 
-  if (text.includes('tas') || text.includes('bag') || text.includes('backpack') || text.includes('ransel')) {
-    itemType = 'backpack';
-    icon = '🎒';
-    titleText = 'Cool backpack';
-  } else if (text.includes('sepatu') || text.includes('shoes') || text.includes('sneaker')) {
-    itemType = 'shoes';
-    icon = '👟';
-    titleText = 'Nice shoes';
-  } else if (text.includes('baju') || text.includes('kaos') || text.includes('shirt')) {
-    itemType = 'clothing';
-    icon = '👕';
-    titleText = 'Nice clothing item';
-  } else if (text.includes('buku') || text.includes('book')) {
-    itemType = 'book';
-    icon = '📚';
-    titleText = 'Useful book';
+  return foodKeywords.some((keyword) => all.includes(keyword));
+}
+
+function foodResponse(priceText) {
+  const insight = 'Always ensure food items are safe to consume and properly stored.';
+
+  return {
+    isFood: true,
+    itemType: 'food',
+    possibleBrand: null,
+    priceText,
+    insight,
+    recipes: ['Quick Snack Prep', 'Simple Meal Addition', 'Creative Leftover Dish'],
+    cookingIdeas: [
+      {
+        title: 'Quick Snack Prep',
+        subtitle: 'Use this item as a quick snack or simple side dish.',
+        difficulty: 'Easy',
+        time: '10 mins',
+        icon: '🍽️',
+      },
+      {
+        title: 'Simple Meal Addition',
+        subtitle: 'Add it to a simple meal to reduce waste.',
+        difficulty: 'Medium',
+        time: '20 mins',
+        icon: '🍽️',
+      },
+      {
+        title: 'Creative Leftover Dish',
+        subtitle: 'Turn it into a creative leftover-friendly dish.',
+        difficulty: 'Hard',
+        time: '45 mins',
+        icon: '🍽️',
+      },
+    ],
+    itemIdeas: [],
+    tips: [insight],
+    similarListings: [],
+  };
+}
+
+function nonFoodResponse({ title, category, price, priceText, itemType }) {
+  const categoryText = category || 'non_food';
+  const saleText =
+    price > 0
+      ? `Although categorized as '${categoryText}', the price indicates it is for sale.`
+      : `This listing appears to be offered for free.`;
+
+  const noun = itemType === 'bag' ? 'bag' : itemType;
+  const insight = `This listing is for a non-food item, a ${noun}, priced at ${priceText}. ${saleText}`;
+
+  let itemIdeas;
+
+  if (itemType === 'bag') {
+    itemIdeas = [
+      {
+        title: 'Pouch Organizer',
+        subtitle: 'Keep your bag tidy',
+        icon: '✨',
+      },
+      {
+        title: 'Dompet (Wallet)',
+        subtitle: 'Complement your bag',
+        icon: '✨',
+      },
+      {
+        title: 'Aksesoris Tas',
+        subtitle: 'Personalize your bag',
+        icon: '✨',
+      },
+    ];
+  } else {
+    itemIdeas = [
+      {
+        title: 'Check Condition',
+        subtitle: 'Inspect details before pickup',
+        icon: '✨',
+      },
+      {
+        title: 'Useful Daily Item',
+        subtitle: 'Consider how it fits your needs',
+        icon: '✨',
+      },
+      {
+        title: 'Gift or Reuse Idea',
+        subtitle: 'Can be reused or shared with someone else',
+        icon: '✨',
+      },
+    ];
   }
 
   return {
@@ -82,193 +180,49 @@ function fallbackAnalyze({ title, description, category, price }) {
     itemType,
     possibleBrand: null,
     priceText,
-    insight: `${titleText}. Listed for ${priceText}. Check condition before claiming or buying.`,
+    insight,
+    recipes: [],
     cookingIdeas: [],
-    itemIdeas: [
-      {
-        title: titleText,
-        subtitle: `Listed for ${priceText}`,
-        icon,
-      },
-      {
-        title: 'Check condition',
-        subtitle: 'Inspect details before pickup',
-        icon: '🔍',
-      },
-    ],
-    tips: [
-      `${titleText}. Listed for ${priceText}. Check condition and confirm pickup details with the owner.`,
-    ],
+    itemIdeas,
+    tips: [insight],
+    similarListings: [],
   };
-}
-
-function cleanJson(text = '') {
-  return String(text)
-    .replace(/```json/g, '')
-    .replace(/```/g, '')
-    .trim();
-}
-
-async function imageUrlToPart(imageUrl) {
-  if (!imageUrl) return null;
-
-  try {
-    const response = await fetch(imageUrl);
-
-    if (!response.ok) return null;
-
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
-
-    if (!contentType.startsWith('image/')) return null;
-
-    const buffer = Buffer.from(await response.arrayBuffer());
-
-    return {
-      inline_data: {
-        mime_type: contentType,
-        data: buffer.toString('base64'),
-      },
-    };
-  } catch {
-    return null;
-  }
-}
-
-async function analyzeWithGemini(payload) {
-  if (!GEMINI_API_KEY) {
-    return fallbackAnalyze(payload);
-  }
-
-  const {
-    title,
-    description,
-    category,
-    price,
-    imageUrl,
-  } = payload;
-
-  const priceText = formatPrice(price);
-
-  const prompt = `
-You are an AI analyzer for ShareBite, a neighborhood sharing marketplace.
-
-Analyze this listing:
-Title: ${title || ''}
-Description: ${description || ''}
-Category: ${category || ''}
-Price: ${priceText}
-
-Rules:
-- Detect if item is food or non-food.
-- If non-food, cookingIdeas MUST be [].
-- If food, itemIdeas MUST be [].
-- Do not say free when price is above 0.
-- If image/logo clearly shows brand, detect possible brand.
-- If brand unclear, use null.
-- Return JSON only.
-
-JSON schema:
-{
-  "isFood": boolean,
-  "itemType": string,
-  "possibleBrand": string | null,
-  "priceText": string,
-  "insight": string,
-  "cookingIdeas": [
-    {
-      "title": string,
-      "difficulty": string,
-      "time": string,
-      "emoji": string
-    }
-  ],
-  "itemIdeas": [
-    {
-      "title": string,
-      "subtitle": string,
-      "icon": string
-    }
-  ],
-  "tips": [string]
-}
-`;
-
-  const parts = [{ text: prompt }];
-  const imagePart = await imageUrlToPart(imageUrl);
-
-  if (imagePart) {
-    parts.push(imagePart);
-  }
-
-  try {
-    const url =
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts,
-          },
-        ],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: 'application/json',
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      return fallbackAnalyze(payload);
-    }
-
-    const json = await response.json();
-    const raw = json?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const parsed = JSON.parse(cleanJson(raw));
-
-    return {
-      isFood: Boolean(parsed.isFood),
-      itemType: parsed.itemType || 'item',
-      possibleBrand: parsed.possibleBrand || null,
-      priceText: parsed.priceText || priceText,
-      insight: parsed.insight || fallbackAnalyze(payload).insight,
-      cookingIdeas: Array.isArray(parsed.cookingIdeas) ? parsed.cookingIdeas : [],
-      itemIdeas: Array.isArray(parsed.itemIdeas) ? parsed.itemIdeas : [],
-      tips: Array.isArray(parsed.tips) ? parsed.tips : [],
-    };
-  } catch {
-    return fallbackAnalyze(payload);
-  }
 }
 
 router.post('/recommend', async (req, res) => {
   try {
-    const ai = await analyzeWithGemini(req.body || {});
+    const body = req.body || {};
+
+    const title = cleanText(body.title);
+    const category = cleanText(body.category);
+    const description = cleanText(body.description);
+    const tags = Array.isArray(body.tags) ? body.tags : [];
+    const price = asNumber(body.price);
+    const priceText = formatRupiah(price);
+
+    const combinedText = joinText([title, category, description, tags.join(' ')]);
+    const isFood = detectFood(category, combinedText);
+    const itemType = detectItemType(combinedText);
+
+    const data = isFood
+      ? foodResponse(priceText)
+      : nonFoodResponse({
+          title,
+          category,
+          price,
+          priceText,
+          itemType,
+        });
 
     return res.json({
       success: true,
-      data: {
-        isFood: ai.isFood,
-        itemType: ai.itemType,
-        possibleBrand: ai.possibleBrand,
-        priceText: ai.priceText,
-        insight: ai.insight,
-        recipes: [],
-        cookingIdeas: ai.isFood ? ai.cookingIdeas : [],
-        itemIdeas: ai.isFood ? [] : ai.itemIdeas,
-        tips: ai.tips,
-        similarListings: [],
-      },
+      data,
     });
-  } catch {
+  } catch (error) {
+    console.error('ML recommend error:', error);
     return res.status(500).json({
       success: false,
-      message: 'AI recommendation failed',
+      message: 'Failed to generate recommendations',
     });
   }
 });

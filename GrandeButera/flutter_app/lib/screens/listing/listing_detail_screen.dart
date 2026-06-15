@@ -81,11 +81,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
 
   Future<void> _fetchML() async {
     if (_listing == null) return;
-
-    if (mounted) {
-      setState(() => _mlLoading = true);
-    }
-
+    if (mounted) setState(() => _mlLoading = true);
     try {
       final res = await ApiService.getRecommendations(
         listingId: _listing!.id,
@@ -93,20 +89,12 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
         tags: _listing!.tags,
         category: _listing!.category,
         description: _listing!.description,
-        price: _listing!.price,
+        price: _listing!.price.toDouble(),
         imageUrl: _listing!.firstImageUrl,
       );
-
-      if (res['success'] == true && mounted) {
-        setState(() => _mlData = res['data']);
-      }
-    } catch (_) {
-      // Silent fail. Listing detail must remain usable even if AI fails.
-    }
-
-    if (mounted) {
-      setState(() => _mlLoading = false);
-    }
+      if (res['success'] == true && mounted) setState(() => _mlData = res['data']);
+    } catch (_) {}
+    if (mounted) setState(() => _mlLoading = false);
   }
 
   void _showRequestSheet() {
@@ -614,255 +602,162 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: catColor.withOpacity(0.2)),
         ),
-        child: Row(
-          children: [
-            _PulsingDot(color: catColor),
-            const SizedBox(width: 12),
-            Text(
-              'AI is analyzing this listing...',
+        child: Row(children: [
+          _PulsingDot(color: catColor),
+          const SizedBox(width: 12),
+          Text('AI is analyzing this listing...',
               style: TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 13,
-                color: catColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+                  fontFamily: 'Nunito',
+                  fontSize: 13,
+                  color: catColor,
+                  fontWeight: FontWeight.w600)),
+        ]),
       );
     }
-
-    if (_mlData == null) {
-      return const SizedBox();
-    }
-
-    final isFood = _mlData?['isFood'] == true;
+    if (_mlData == null) return const SizedBox();
 
     final recipesRaw = (_mlData!['recipes'] as List?) ?? [];
-    final recipes = isFood
-        ? recipesRaw
-            .map((e) => e.toString())
-            .where((e) => e.trim().isNotEmpty)
-            .toList()
-        : <String>[];
-
-    final cookingIdeas = ((_mlData?['cookingIdeas'] as List?) ?? [])
+    final recipes = recipesRaw
+        .map((e) => e.toString())
+        .where((e) => e.trim().isNotEmpty)
+        .toList();
+    final isFood = _mlData!['isFood'] == true;
+    final ideasRaw =
+        ((_mlData![isFood ? 'cookingIdeas' : 'itemIdeas'] as List?) ?? []);
+    final ideas = ideasRaw
         .whereType<Map>()
         .map((e) => Map<String, dynamic>.from(e))
         .toList();
-
-    final itemIdeas = ((_mlData?['itemIdeas'] as List?) ?? [])
-        .whereType<Map>()
-        .map((e) => Map<String, dynamic>.from(e))
-        .toList();
-
-    final ideas = isFood ? cookingIdeas : itemIdeas;
-
     final similar = (_mlData!['similarListings'] as List?) ?? [];
-
     final tipsRaw = (_mlData!['tips'] as List?) ?? [];
     final tips = tipsRaw
         .map((e) => e.toString())
         .where((e) => e.trim().isNotEmpty)
         .toList();
 
-    final insight = _mlData?['insight']?.toString();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (insight != null && insight.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeOut,
-            builder: (_, v, child) => Opacity(opacity: v, child: child),
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppTheme.isDark(context)
-                    ? const Color(0xFF182A20)
-                    : const Color(0xFFEFFAF3),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: catColor.withOpacity(0.3)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    isFood
-                        ? Icons.restaurant_menu_rounded
-                        : Icons.auto_awesome_rounded,
-                    color: catColor,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      insight,
-                      style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontSize: 13,
-                        height: 1.5,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.txtPrimary(context),
-                      ),
-                    ),
-                  ),
-                ],
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      if (tips.isNotEmpty) ...[
+        const SizedBox(height: 20),
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+          builder: (_, v, child) =>
+              Opacity(opacity: v, child: child),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: isFood
+                  ? (AppTheme.isDark(context)
+                      ? const Color(0xFF2A2010)
+                      : const Color(0xFFFFF8E7))
+                  : (AppTheme.isDark(context)
+                      ? const Color(0xFF102A26)
+                      : const Color(0xFFF0FFF7)),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isFood ? const Color(0xFFFFE0A0) : catColor.withOpacity(0.25),
               ),
             ),
-          ),
-        ] else if (tips.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeOut,
-            builder: (_, v, child) => Opacity(opacity: v, child: child),
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppTheme.isDark(context)
-                    ? const Color(0xFF2A2010)
-                    : const Color(0xFFFFF8E7),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFFFE0A0)),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Icon(
+                isFood ? Icons.lightbulb_outline_rounded : Icons.auto_awesome_rounded,
+                color: isFood ? const Color(0xFFFFB300) : catColor,
+                size: 20,
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.lightbulb_outline_rounded,
-                    color: Color(0xFFFFB300),
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      tips.first,
+              const SizedBox(width: 10),
+              Expanded(
+                  child: Text(tips.first,
                       style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontSize: 13,
-                        height: 1.5,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.txtPrimary(context),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                          fontFamily: 'Nunito',
+                          fontSize: 13,
+                          height: 1.5,
+                          fontWeight: FontWeight.w500))),
+            ]),
           ),
-        ],
+        ),
+      ],
 
-        if (ideas.isNotEmpty) ...[
-          const SizedBox(height: 24),
-          _sectionTitle(
-            isFood ? 'Cooking ideas from AI' : 'AI item insights',
-          ),
-          const SizedBox(height: 12),
-          ...ideas.asMap().entries.map(
-                (e) => _AnimatedIdeaCard(
-                  idea: e.value,
-                  index: e.key,
-                  catColor: catColor,
-                  isFood: isFood,
-                  onTap: () {
-                    if (isFood) {
-                      _showRecipeSheet(e.value, catColor);
-                    }
-                  },
-                ),
-              ),
-        ],
+      if (ideas.isNotEmpty) ...[
+        const SizedBox(height: 24),
+        _sectionTitle(isFood ? 'Cooking ideas from AI' : 'AI item insights'),
+        const SizedBox(height: 12),
+        ...ideas.asMap().entries.map((e) => _AnimatedIdeaCard(
+              idea: e.value,
+              isFood: isFood,
+              index: e.key,
+              catColor: catColor,
+              onTap: () { if (isFood) _showRecipeSheet(e.value, catColor); },
+            )),
+      ],
 
-        if (recipes.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          _sectionTitle('Suggested recipes'),
-          const SizedBox(height: 10),
-          Wrap(
+      if (recipes.isNotEmpty) ...[
+        const SizedBox(height: 20),
+        _sectionTitle('Suggested recipes'),
+        const SizedBox(height: 10),
+        Wrap(
             spacing: 8,
             runSpacing: 8,
             children: recipes
-                .map(
-                  (r) => _PressableRecipeChip(
-                    label: r,
-                    color: catColor,
-                    onTap: () => _showRecipeSheet(
-                      {
-                        'title': r,
-                        'difficulty': 'Easy',
-                        'time': '15-25 min',
-                      },
-                      catColor,
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ],
-
-        if (similar.isNotEmpty) ...[
-          const SizedBox(height: 24),
-          _sectionTitle('Similar listings'),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 160,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: similar.length,
-              itemBuilder: (_, i) {
-                final item = ListingModel.fromJson(similar[i]);
-                final c =
-                    AppTheme.categoryColors[item.category] ?? AppTheme.primary;
-                final img = item.firstImageUrl.isNotEmpty
-                    ? item.firstImageUrl
-                    : getFallbackImage(item);
-
-                return _PressableCard(
-                  onTap: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ListingDetailScreen(listingId: item.id),
-                    ),
-                  ),
-                  child: Container(
-                    width: 130,
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      color: AppTheme.card(context),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: [
-                        Expanded(child: _listingImage(img, c)),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            item.title,
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppTheme.txtPrimary(context),
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+                .map((r) => _PressableRecipeChip(
+                      label: r,
+                      color: catColor,
+                      onTap: () => _showRecipeSheet(
+                          {'title': r, 'difficulty': 'Easy', 'time': '15-25 min'},
+                          catColor),
+                    ))
+                .toList()),
       ],
-    );
+
+      if (similar.isNotEmpty) ...[
+        const SizedBox(height: 24),
+        _sectionTitle('Similar listings'),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 160,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: similar.length,
+            itemBuilder: (_, i) {
+              final item = ListingModel.fromJson(similar[i]);
+              final c = AppTheme.categoryColors[item.category] ?? AppTheme.primary;
+              final img = item.firstImageUrl.isNotEmpty
+                  ? item.firstImageUrl
+                  : getFallbackImage(item);
+              return _PressableCard(
+                onTap: () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) =>
+                          ListingDetailScreen(listingId: item.id)),
+                ),
+                child: Container(
+                  width: 130,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                      color: AppTheme.card(context),
+                      borderRadius: BorderRadius.circular(16)),
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(children: [
+                    Expanded(child: _listingImage(img, c)),
+                    Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(item.title,
+                            style: TextStyle(
+                                fontFamily: 'Nunito',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.txtPrimary(context)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis)),
+                  ]),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    ]);
   }
 
   Widget _infoRow(IconData icon, Color color, String text, {String? sub}) {
@@ -1084,15 +979,15 @@ class _AnimatedIdeaCard extends StatefulWidget {
   final Map<String, dynamic> idea;
   final int index;
   final Color catColor;
-  final bool isFood;
   final VoidCallback onTap;
+  final bool isFood;
 
   const _AnimatedIdeaCard({
     required this.idea,
     required this.index,
     required this.catColor,
-    required this.isFood,
     required this.onTap,
+    required this.isFood,
   });
 
   @override
@@ -1108,65 +1003,20 @@ class _AnimatedIdeaCardState extends State<_AnimatedIdeaCard>
   @override
   void initState() {
     super.initState();
-
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-
-    _fade = CurvedAnimation(
-      parent: _ctrl,
-      curve: Curves.easeOut,
-    );
-
-    _slide = Tween<Offset>(
-      begin: const Offset(0.1, 0),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: Curves.easeOutCubic,
-      ),
-    );
-
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    _slide = Tween<Offset>(begin: const Offset(0.1, 0), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     Future.delayed(Duration(milliseconds: widget.index * 100), () {
-      if (mounted) {
-        _ctrl.forward();
-      }
+      if (mounted) _ctrl.forward();
     });
   }
 
   @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  IconData _icon() {
-    if (widget.isFood) {
-      return Icons.restaurant_outlined;
-    }
-
-    final iconText = widget.idea['icon']?.toString() ?? '';
-
-    if (iconText.contains('🎒')) return Icons.backpack_outlined;
-    if (iconText.contains('👟')) return Icons.directions_walk_rounded;
-    if (iconText.contains('👕')) return Icons.checkroom_outlined;
-    if (iconText.contains('📚')) return Icons.menu_book_outlined;
-
-    return Icons.auto_awesome_rounded;
-  }
+  void dispose() { _ctrl.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
-    final title = (widget.idea['title'] ??
-            (widget.isFood ? 'Recipe idea' : 'Useful item'))
-        .toString();
-
-    final subtitle = widget.isFood
-        ? '${widget.idea['difficulty'] ?? 'Easy'} • ${widget.idea['time'] ?? '15-25 min'}'
-        : (widget.idea['subtitle'] ?? 'Check details before pickup').toString();
-
     return SlideTransition(
       position: _slide,
       child: FadeTransition(
@@ -1181,69 +1031,51 @@ class _AnimatedIdeaCardState extends State<_AnimatedIdeaCard>
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppTheme.div(context)),
             ),
-            child: Row(
-              children: [
-                Container(
+            child: Row(children: [
+              Container(
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: widget.catColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                      color: AppTheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12)),
                   child: Icon(
-                    _icon(),
-                    color: widget.catColor,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: AppTheme.txtPrimary(context),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 11,
-                          color: AppTheme.txtSecondary(context),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (widget.isFood)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: widget.catColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'View recipe',
-                      style: TextStyle(
+                      widget.isFood
+                          ? Icons.restaurant_outlined
+                          : Icons.auto_awesome_rounded,
+                      color: AppTheme.primary,
+                      size: 22)),
+              const SizedBox(width: 14),
+              Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text((widget.idea['title'] ?? 'Recipe idea').toString(),
+                    style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: AppTheme.txtPrimary(context))),
+                const SizedBox(height: 2),
+                Text(
+                    widget.isFood
+                        ? '${widget.idea['difficulty'] ?? 'Easy'} • ${widget.idea['time'] ?? '15-25 min'}'
+                        : (widget.idea['subtitle'] ?? 'Check details before pickup').toString(),
+                    style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: widget.catColor,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+                        color: AppTheme.txtSecondary(context))),
+              ])),
+              if (widget.isFood)
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                        color: AppTheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Text('View recipe',
+                        style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.primary))),
+            ]),
           ),
         ),
       ),
