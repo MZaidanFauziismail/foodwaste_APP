@@ -4,6 +4,11 @@ const router = express.Router();
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const API_ORIGIN = (
+  process.env.PUBLIC_API_ORIGIN ||
+  process.env.API_ORIGIN ||
+  'https://foodwasteapp-production-6eaa.up.railway.app'
+).replace(/\/+$/, '');
 
 function cleanText(value) {
   return String(value || '').trim();
@@ -195,10 +200,25 @@ function fallbackForPayload(body) {
   return data;
 }
 
-async function imageUrlToInlineData(imageUrl) {
-  const url = cleanText(imageUrl);
+function normalizeImageUrl(imageUrl) {
+  const raw = cleanText(imageUrl);
+  if (!raw) return null;
 
-  if (!/^https?:\/\//i.test(url)) {
+  if (/^https?:\/\//i.test(raw)) {
+    return raw;
+  }
+
+  if (raw.startsWith('/')) {
+    return `${API_ORIGIN}${raw}`;
+  }
+
+  return null;
+}
+
+async function imageUrlToInlineData(imageUrl) {
+  const url = normalizeImageUrl(imageUrl);
+
+  if (!url) {
     return null;
   }
 
