@@ -12,6 +12,12 @@ const {
   parseArrayInput,
 } = require('../utils/formatters');
 
+const uploadRoot = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(__dirname, '../uploads');
+
+const listingUploadDirectory = path.join(uploadRoot, 'listings');
+
 
 const AI_CACHE_API_ORIGIN = (
   process.env.PUBLIC_API_ORIGIN ||
@@ -159,10 +165,7 @@ function getImageExtension(file) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const directory = path.join(
-      __dirname,
-      '../uploads/listings',
-    );
+    const directory = listingUploadDirectory;
 
     if (!fs.existsSync(directory)) {
       fs.mkdirSync(directory, {

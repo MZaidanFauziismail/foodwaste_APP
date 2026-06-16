@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const fs = require('fs');
 const { pool } = require('./db/pool');
 const runMigrations = require('./db/migrate');
 const seedDemoData = require('./seedDemo');
@@ -21,7 +22,12 @@ app.use(morgan('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const uploadRoot = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(__dirname, 'uploads');
+
+fs.mkdirSync(uploadRoot, { recursive: true });
+app.use('/uploads', express.static(uploadRoot));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
