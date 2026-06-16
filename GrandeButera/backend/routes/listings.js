@@ -12,6 +12,107 @@ const {
   parseArrayInput,
 } = require('../utils/formatters');
 
+
+const AI_CACHE_API_ORIGIN = (
+  process.env.PUBLIC_API_ORIGIN ||
+  process.env.API_ORIGIN ||
+  (process.env.RAILWAY_PUBLIC_DOMAIN
+    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+    : '') ||
+  'https://foodwasteapp-production-6eaa.up.railway.app'
+).replace(/\/+$/, '');
+
+function firstListingImage(images) {
+  if (Array.isArray(images)) {
+    return images.find(Boolean) || '';
+  }
+
+  if (typeof images === 'string') {
+    try {
+      const parsed = JSON.parse(images);
+      if (Array.isArray(parsed)) return parsed.find(Boolean) || '';
+    } catch (_) {
+      return images;
+    }
+  }
+
+  return '';
+}
+
+async function cacheAiForListing(listing) {
+  if (!listing || !listing.id) return null;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const payload = {
+      title: listing.title || '',
+      category: listing.category || '',
+      description: listing.description || '',
+      tags: Array.isArray(listing.tags) ? listing.tags : [],
+      price: Number(listing.price || 0),
+      imageUrl: firstListingImage(listing.images),
+    };
+
+    const response = await fetch(`${AI_CACHE_API_ORIGIN}/api/ml/recommend`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      console.warn('AI cache skipped:', response.status);
+      return null;
+    }
+
+    const json = await response.json();
+    const data = json && json.data ? json.data : null;
+
+    if (!data) return null;
+
+    const ideas = data.isFood
+      ? data.cookingIdeas || []
+      : data.itemIdeas || [];
+
+    const description =
+      data.insight ||
+      (Array.isArray(data.tips) && data.tips.length ? data.tips[0] : '') ||
+      '';
+
+    await query(
+      `
+        UPDATE listings
+        SET
+          ai_description = $1,
+          ai_ideas = $2::jsonb,
+          ai_data = $3::jsonb,
+          ai_source = $4,
+          updated_at = NOW()
+        WHERE id = $5
+      `,
+      [
+        description,
+        JSON.stringify(ideas),
+        JSON.stringify(data),
+        data.aiSource || null,
+        listing.id,
+      ],
+    );
+
+    return data;
+  } catch (error) {
+    console.warn('AI cache failed:', error.message);
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+
 const allowedImageExtensions = new Set([
   '.jpg',
   '.jpeg',
@@ -604,6 +705,8 @@ router.post(
       );
 
       await client.query('COMMIT');
+
+      await cacheAiForListing(inserted.rows[0]);
 
       const listing =
         await getListingWithOwner(
