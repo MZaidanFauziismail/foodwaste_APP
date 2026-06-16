@@ -81,6 +81,18 @@ class _ListingDetailScreenState extends State<ListingDetailScreen>
 
   Future<void> _fetchML() async {
     if (_listing == null) return;
+
+    final cachedAi = _listing!.aiData;
+    if (cachedAi != null && cachedAi.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          _mlData = Map<String, dynamic>.from(cachedAi);
+          _mlLoading = false;
+        });
+      }
+      return;
+    }
+
     if (mounted) setState(() => _mlLoading = true);
     try {
       final res = await ApiService.getRecommendations(

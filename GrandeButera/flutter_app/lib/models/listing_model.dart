@@ -19,6 +19,10 @@ class ListingModel {
   final List<String> dietaryInfo;
   final List<String> allergens;
   final int viewCount;
+  final Map<String, dynamic>? aiData;
+  final String? aiDescription;
+  final List<dynamic>? aiIdeas;
+  final String? aiSource;
   final DateTime createdAt;
 
   ListingModel({
@@ -40,6 +44,10 @@ class ListingModel {
     this.dietaryInfo = const [],
     this.allergens = const [],
     this.viewCount = 0,
+    this.aiData,
+    this.aiDescription,
+    this.aiIdeas,
+    this.aiSource,
     required this.createdAt,
   });
 
@@ -77,6 +85,14 @@ class ListingModel {
       dietaryInfo: List<String>.from(json['dietaryInfo'] ?? []),
       allergens: List<String>.from(json['allergens'] ?? []),
       viewCount: _asInt(json['viewCount']),
+      aiData: (json['aiData'] ?? json['ai_data']) is Map
+          ? Map<String, dynamic>.from(json['aiData'] ?? json['ai_data'])
+          : null,
+      aiDescription: json['aiDescription'] ?? json['ai_description'],
+      aiIdeas: (json['aiIdeas'] ?? json['ai_ideas']) is List
+          ? List<dynamic>.from(json['aiIdeas'] ?? json['ai_ideas'])
+          : null,
+      aiSource: json['aiSource'] ?? json['ai_source'],
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt']) ?? DateTime.now()
           : DateTime.now(),
