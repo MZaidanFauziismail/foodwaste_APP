@@ -248,7 +248,7 @@ async function imageUrlToInlineData(imageUrl) {
     }
 
     return {
-      mimeType,
+      mime_type: mimeType,
       data: Buffer.from(arrayBuffer).toString('base64'),
     };
   } catch (error) {
@@ -343,7 +343,7 @@ Schema:
 
   if (imageInlineData) {
     parts.push({
-      inlineData: imageInlineData,
+      inline_data: imageInlineData,
     });
   }
 
