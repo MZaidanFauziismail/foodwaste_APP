@@ -1,0 +1,15 @@
+# Ignore legacy Laravel/PHP files from GitHub language statistics
+*.php linguist-vendored
+*.blade.php linguist-vendored
+
+# Ignore generated/cache/build folders if they ever enter the repo
+**/node_modules/** linguist-vendored
+**/build/** linguist-vendored
+**/.gradle/** linguist-vendored
+**/_backups/** linguist-vendored
+GrandeButera_backup/** linguist-vendored
+sharebite_fix_patch/** linguist-vendored
+
+# Make sure ShareBite app source is counted normally
+GrandeButera/flutter_app/lib/** linguist-vendored=false
+GrandeButera/backend/**/*.js linguist-vendored=false
