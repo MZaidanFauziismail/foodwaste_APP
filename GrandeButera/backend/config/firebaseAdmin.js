@@ -1,7 +1,17 @@
 const admin = require('firebase-admin');
 
+let initialized = false;
+
 function getFirebaseAdmin() {
-  if (admin.apps.length) return admin;
+  if (initialized) return admin;
+
+  try {
+    admin.app();
+    initialized = true;
+    return admin;
+  } catch (_) {
+    // No Firebase app initialized yet
+  }
 
   const encoded = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
   if (!encoded) {
@@ -19,6 +29,7 @@ function getFirebaseAdmin() {
     credential: admin.credential.cert(serviceAccount),
   });
 
+  initialized = true;
   return admin;
 }
 
