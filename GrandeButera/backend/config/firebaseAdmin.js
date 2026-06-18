@@ -13,17 +13,33 @@ function getFirebaseAdmin() {
     // No Firebase app initialized yet
   }
 
-  const encoded = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  if (!encoded) {
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+  if (!raw) {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 is missing');
   }
 
   let serviceAccount;
   try {
-    serviceAccount = JSON.parse(Buffer.from(encoded, 'base64').toString('utf8'));
+    const decoded = Buffer
+      .from(String(raw).replace(/\s/g, ''), 'base64')
+      .toString('utf8');
+
+    serviceAccount = JSON.parse(decoded);
   } catch (err) {
     throw new Error('Invalid FIREBASE_SERVICE_ACCOUNT_BASE64: ' + err.message);
   }
+
+  if (
+    !serviceAccount.project_id ||
+    !serviceAccount.client_email ||
+    !serviceAccount.private_key
+  ) {
+    throw new Error(
+      'FIREBASE_SERVICE_ACCOUNT_BASE64 must be Firebase Admin service account JSON, not google-services.json'
+    );
+  }
+
+  serviceAccount.private_key = String(serviceAccount.private_key).replace(/\\n/g, '\n');
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
