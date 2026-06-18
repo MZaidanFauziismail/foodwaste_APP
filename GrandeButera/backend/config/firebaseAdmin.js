@@ -1,19 +1,11 @@
-const admin = require('firebase-admin');
+const { initializeApp, cert, getApps, getApp } = require('firebase-admin/app');
+const { getAuth } = require('firebase-admin/auth');
 
-let initialized = false;
+let app = null;
 
-function getFirebaseAdmin() {
-  if (initialized) return admin;
-
-  try {
-    admin.app();
-    initialized = true;
-    return admin;
-  } catch (_) {
-    // No Firebase app initialized yet
-  }
-
+function loadServiceAccount() {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+
   if (!raw) {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 is missing');
   }
@@ -41,12 +33,23 @@ function getFirebaseAdmin() {
 
   serviceAccount.private_key = String(serviceAccount.private_key).replace(/\\n/g, '\n');
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  return serviceAccount;
+}
 
-  initialized = true;
-  return admin;
+function getFirebaseAdmin() {
+  if (!app) {
+    if (getApps().length > 0) {
+      app = getApp();
+    } else {
+      app = initializeApp({
+        credential: cert(loadServiceAccount()),
+      });
+    }
+  }
+
+  return {
+    auth: () => getAuth(app),
+  };
 }
 
 module.exports = { getFirebaseAdmin };
