@@ -101,7 +101,7 @@ class ListingModel {
 
   String _resolveImageUrl(String img) {
     if (img.startsWith('http') || img.startsWith('file://')) return img;
-    if (img.startsWith('/uploads')) return 'https://foodwasteapp-production-6eaa.up.railway.app$img';
+    if (img.startsWith('/uploads')) return 'https://foodwasteapp-production.up.railway.app$img';
     if (img.startsWith('/')) return 'file://$img';
     if (RegExp(r'^[A-Za-z]:\\').hasMatch(img)) return 'file:///${img.replaceAll('\\', '/')}';
     return img;
@@ -143,7 +143,7 @@ class ListingOwner {
   String get avatarUrl {
     if (avatar == null) return '';
     if (avatar!.startsWith('http') || avatar!.startsWith('file://')) return avatar!;
-    if (avatar!.startsWith('/uploads')) return 'https://foodwasteapp-production-6eaa.up.railway.app$avatar';
+    if (avatar!.startsWith('/uploads')) return 'https://foodwasteapp-production.up.railway.app$avatar';
     if (avatar!.startsWith('/')) return 'file://$avatar';
     return avatar!;
   }

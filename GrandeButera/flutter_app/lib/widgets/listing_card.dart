@@ -135,11 +135,11 @@ class _ListingCardState extends State<ListingCard>
 
     return AnimatedBuilder(
       animation: _ctrl,
-      builder: (_, child) => Transform.scale(
+      builder: (context, child) => Transform.scale(
         scale: _scaleAnim.value,
         child: Container(
           decoration: BoxDecoration(
-            gradient: AppTheme.skyGradient(
+            gradient: AppTheme.skyGradientFor(context,
                 begin: Alignment.topCenter, end: Alignment.bottomCenter),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
@@ -183,7 +183,7 @@ class _ListingCardState extends State<ListingCard>
                       ),
                       child: Text(
                         l.isFree ? 'FREE' : _formatPrice(l.price),
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Nunito',
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
@@ -217,11 +217,11 @@ class _ListingCardState extends State<ListingCard>
                   children: [
                     Text(
                       l.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimary),
+                          color: AppTheme.txtPrimary(context)),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -229,7 +229,7 @@ class _ListingCardState extends State<ListingCard>
                     if (l.owner != null)
                       Row(children: [
                         Icon(Icons.person_outline_rounded,
-                            size: 12, color: AppTheme.textSecondary),
+                            size: 12, color: AppTheme.txtSecondary(context)),
                         const SizedBox(width: 3),
                         Expanded(
                           child: Text(
@@ -237,7 +237,7 @@ class _ListingCardState extends State<ListingCard>
                             style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 11,
-                                color: AppTheme.textSecondary,
+                                color: AppTheme.txtSecondary(context),
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

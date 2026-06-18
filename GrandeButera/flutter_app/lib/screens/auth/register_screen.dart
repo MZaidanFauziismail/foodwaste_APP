@@ -61,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: FadeTransition(
         opacity: _fadeAnim,
         child: SafeArea(
@@ -88,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           color: Colors.white.withOpacity(0.22),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 18),
+                        child: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 18),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         _field(_passCtrl, 'Password', 'Min. 6 characters', Icons.lock_outline_rounded,
                             obscure: _obscure,
                             suffixIcon: IconButton(
-                              icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined, color: AppTheme.textSecondary, size: 20),
+                              icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined, color: AppTheme.txtSecondary(context), size: 20),
                               onPressed: () => setState(() => _obscure = !_obscure),
                             ),
                             validator: (v) => v == null || v.length < 6 ? 'Min. 6 characters' : null),
@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         _field(_confirmCtrl, 'Confirm password', 'Repeat your password', Icons.lock_outline_rounded,
                             obscure: _obscureConfirm,
                             suffixIcon: IconButton(
-                              icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined, color: AppTheme.textSecondary, size: 20),
+                              icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined, color: AppTheme.txtSecondary(context), size: 20),
                               onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
                             ),
                             validator: (v) => v != _passCtrl.text ? 'Passwords do not match' : null),
@@ -157,10 +157,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Already have an account? ', style: TextStyle(fontFamily: 'Nunito', color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500)),
+                            Text('Already have an account? ', style: TextStyle(fontFamily: 'Nunito', color: AppTheme.txtSecondary(context), fontSize: 14, fontWeight: FontWeight.w500)),
                             GestureDetector(
                               onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-                              child: const Text('Sign in', style: TextStyle(fontFamily: 'Nunito', color: AppTheme.primary, fontSize: 14, fontWeight: FontWeight.w800)),
+                              child: Text('Sign in', style: TextStyle(fontFamily: 'Nunito', color: AppTheme.primary, fontSize: 14, fontWeight: FontWeight.w800)),
                             ),
                           ],
                         ),
@@ -181,20 +181,20 @@ class _RegisterScreenState extends State<RegisterScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontFamily: 'Nunito', fontSize: 14, fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
+        Text(label, style: TextStyle(fontFamily: 'Nunito', fontSize: 14, fontWeight: FontWeight.w700, color: AppTheme.txtPrimary(context))),
         const SizedBox(height: 8),
         TextFormField(
           controller: ctrl,
           obscureText: obscure,
           keyboardType: type,
           validator: validator,
-          style: const TextStyle(fontFamily: 'Nunito', fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+          style: TextStyle(fontFamily: 'Nunito', fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.txtPrimary(context)),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, color: AppTheme.textSecondary, size: 20),
+            prefixIcon: Icon(icon, color: AppTheme.txtSecondary(context), size: 20),
             suffixIcon: suffixIcon,
             filled: true,
-            fillColor: const Color(0xFFEAF6FF),
+            fillColor: AppTheme.inputFill(context),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppTheme.primary, width: 2)),
             errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppTheme.secondary)),

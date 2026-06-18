@@ -53,6 +53,21 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
+  Future<void> _loginWithGoogle() async {
+    final auth = context.read<AuthProvider>();
+    final ok = await auth.loginWithGoogle();
+
+    if (ok && mounted) {
+      Navigator.pushReplacementNamed(context, '/main');
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(auth.error ?? 'Google login failed'),
+        backgroundColor: AppTheme.secondary,
+        margin: const EdgeInsets.all(16),
+      ));
+    }
+  }
+
   void _showForgotPasswordInfo() {
     showDialog(
       context: context,
@@ -177,6 +192,38 @@ class _LoginScreenState extends State<LoginScreen>
                               label: 'Sign in',
                               isLoading: auth.isLoading,
                               onPressed: auth.isLoading ? null : _login,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 52,
+                            child: OutlinedButton.icon(
+                              onPressed: auth.isLoading ? null : _loginWithGoogle,
+                              icon: const Text(
+                                'G',
+                                style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              label: const Text(
+                                'Continue with Google',
+                                style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppTheme.primary,
+                                backgroundColor: AppTheme.inputFill(context),
+                                side: BorderSide(color: AppTheme.primary.withOpacity(0.30)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
                             ),
                           ),
                         ],

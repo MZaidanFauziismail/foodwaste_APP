@@ -91,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: SafeArea(
         child: Column(
           children: [
@@ -170,12 +170,12 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
   }
 
   Widget _buildLoadingState() {
-    return const Center(
+    return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        CircularProgressIndicator(color: AppTheme.primary, strokeWidth: 3),
-        SizedBox(height: 16),
+        const CircularProgressIndicator(color: AppTheme.primary, strokeWidth: 3),
+        const SizedBox(height: 16),
         Text('Searching...', style: TextStyle(fontFamily: 'Nunito', fontSize: 14,
-            color: AppTheme.textSecondary, fontWeight: FontWeight.w600)),
+            color: AppTheme.txtSecondary(context), fontWeight: FontWeight.w600)),
       ]),
     );
   }
@@ -187,9 +187,9 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Trending',
+          Text('Trending',
               style: TextStyle(fontFamily: 'Nunito', fontSize: 18,
-                  fontWeight: FontWeight.w800, color: AppTheme.textPrimary)),
+                  fontWeight: FontWeight.w800, color: AppTheme.txtPrimary(context))),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
@@ -206,9 +206,9 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
             }).toList(),
           ),
           const SizedBox(height: 28),
-          const Text('Browse by category',
+          Text('Browse by category',
               style: TextStyle(fontFamily: 'Nunito', fontSize: 18,
-                  fontWeight: FontWeight.w800, color: AppTheme.textPrimary)),
+                  fontWeight: FontWeight.w800, color: AppTheme.txtPrimary(context))),
           const SizedBox(height: 14),
           GridView.count(
             shrinkWrap: true,
@@ -249,8 +249,8 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
             duration: const Duration(milliseconds: 300),
             child: Text('${_results.length} results',
                 key: ValueKey(_results.length),
-                style: const TextStyle(fontFamily: 'Nunito', fontSize: 15,
-                    fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
+                style: TextStyle(fontFamily: 'Nunito', fontSize: 15,
+                    fontWeight: FontWeight.w700, color: AppTheme.txtPrimary(context))),
           ),
         ),
         Expanded(
@@ -294,16 +294,16 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
             width: 72, height: 72,
             decoration: BoxDecoration(
                 color: AppTheme.primary.withOpacity(0.1), shape: BoxShape.circle),
-            child: const Icon(Icons.search_off_rounded, color: AppTheme.primary, size: 36)),
+            child: Icon(Icons.search_off_rounded, color: AppTheme.primary, size: 36)),
         ),
         const SizedBox(height: 20),
         Text('No results for "${_searchCtrl.text}"',
-            style: const TextStyle(fontFamily: 'Nunito', fontSize: 16,
-                fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
+            style: TextStyle(fontFamily: 'Nunito', fontSize: 16,
+                fontWeight: FontWeight.w800, color: AppTheme.txtPrimary(context)),
             textAlign: TextAlign.center),
         const SizedBox(height: 8),
         Text('Try different keywords or a wider radius',
-            style: TextStyle(fontFamily: 'Nunito', fontSize: 13, color: AppTheme.textSecondary)),
+            style: TextStyle(fontFamily: 'Nunito', fontSize: 13, color: AppTheme.txtSecondary(context))),
       ]),
     );
   }
@@ -354,9 +354,9 @@ class _AnimatedSearchBarState extends State<_AnimatedSearchBar>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _borderAnim,
-      builder: (_, __) => Container(
+      builder: (context, __) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surface(context),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: Color.lerp(AppTheme.divider, AppTheme.primary, _borderAnim.value)!,
@@ -375,15 +375,15 @@ class _AnimatedSearchBarState extends State<_AnimatedSearchBar>
           focusNode: widget.focusNode,
           onSubmitted: widget.onSubmitted,
           onChanged: widget.onChanged,
-          style: const TextStyle(fontFamily: 'Nunito', fontSize: 15,
-              fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+          style: TextStyle(fontFamily: 'Nunito', fontSize: 15,
+              fontWeight: FontWeight.w600, color: AppTheme.txtPrimary(context)),
           decoration: InputDecoration(
             hintText: 'Search for food and items...',
-            hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.textSecondary, fontSize: 14),
-            prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.primary, size: 22),
+            hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.txtSecondary(context), fontSize: 14),
+            prefixIcon: Icon(Icons.search_rounded, color: AppTheme.primary, size: 22),
             suffixIcon: widget.controller.text.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 18, color: AppTheme.textSecondary),
+                    icon: Icon(Icons.close_rounded, size: 18, color: AppTheme.txtSecondary(context)),
                     onPressed: widget.onClear)
                 : null,
             filled: false,
@@ -442,16 +442,16 @@ class _TrendingChipState extends State<_TrendingChip>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.card(context),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppTheme.divider),
+              border: Border.all(color: AppTheme.div(context)),
               boxShadow: [
                 BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6, offset: const Offset(0, 2)),
               ],
             ),
             child: Text(widget.label,
-                style: const TextStyle(fontFamily: 'Nunito', fontSize: 13,
-                    fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                style: TextStyle(fontFamily: 'Nunito', fontSize: 13,
+                    fontWeight: FontWeight.w600, color: AppTheme.txtPrimary(context))),
           ),
         ),
       ),
@@ -498,7 +498,7 @@ class _AnimatedCategoryCardState extends State<_AnimatedCategoryCard>
         scale: _scale,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.card(context),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: widget.color.withOpacity(0.3)),
             boxShadow: [

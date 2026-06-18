@@ -136,12 +136,12 @@ class _AddListingScreenState extends State<AddListingScreen>
     final catColor = AppTheme.categoryColors[_category] ?? AppTheme.primary;
 
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       appBar: AppBar(
-        title: const Text('New listing'),
+        title: Text('New listing'),
         leading: _AnimatedCloseButton(onTap: () => Navigator.pop(context)),
-        backgroundColor: Colors.white,
-        foregroundColor: AppTheme.textPrimary,
+        backgroundColor: AppTheme.surface(context),
+        foregroundColor: AppTheme.txtPrimary(context),
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
@@ -264,11 +264,11 @@ class _AddListingScreenState extends State<AddListingScreen>
                       child: TextField(
                         controller: _tagCtrl,
                         onSubmitted: (_) => _addTag(),
-                        style: const TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.textPrimary),
+                        style: TextStyle(fontFamily: 'Nunito', fontSize: 14, color: AppTheme.txtPrimary(context)),
                         decoration: InputDecoration(
                           hintText: 'Add a tag, press Enter',
-                          hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 13),
-                          filled: true, fillColor: Colors.white,
+                          hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.txtSecondary(context).withOpacity(0.6), fontSize: 13),
+                          filled: true, fillColor: AppTheme.inputFill(context),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppTheme.divider)),
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppTheme.divider)),
                           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppTheme.primary, width: 1.5)),
@@ -341,7 +341,7 @@ class _AddListingScreenState extends State<AddListingScreen>
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surface(context),
           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20, offset: const Offset(0, -4))],
         ),
         child: _PublishButton(loading: _loading, color: catColor, onTap: _submit),
@@ -350,8 +350,8 @@ class _AddListingScreenState extends State<AddListingScreen>
   }
 
   Widget _sectionLabel(String text) => Text(text,
-      style: const TextStyle(fontFamily: 'Nunito', fontSize: 14,
-          fontWeight: FontWeight.w700, color: AppTheme.textPrimary));
+      style: TextStyle(fontFamily: 'Nunito', fontSize: 14,
+          fontWeight: FontWeight.w700, color: AppTheme.txtPrimary(context)));
 
   Widget _textField(TextEditingController ctrl, String hint,
       {int maxLines = 1, TextInputType? type, String? Function(String?)? validator}) {
@@ -360,12 +360,12 @@ class _AddListingScreenState extends State<AddListingScreen>
       maxLines: maxLines,
       keyboardType: type,
       validator: validator,
-      style: const TextStyle(fontFamily: 'Nunito', fontSize: 14,
-          fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+      style: TextStyle(fontFamily: 'Nunito', fontSize: 14,
+          fontWeight: FontWeight.w600, color: AppTheme.txtPrimary(context)),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 14),
-        filled: true, fillColor: Colors.white,
+        hintStyle: TextStyle(fontFamily: 'Nunito', color: AppTheme.txtSecondary(context).withOpacity(0.6), fontSize: 14),
+        filled: true, fillColor: AppTheme.inputFill(context),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppTheme.divider)),
         enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppTheme.divider)),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppTheme.primary, width: 1.5)),
@@ -401,7 +401,7 @@ class _AnimatedCloseButtonState extends State<_AnimatedCloseButton>
       onTapUp: (_) { _ctrl.reverse(); widget.onTap(); },
       onTapCancel: () => _ctrl.reverse(),
       child: ScaleTransition(scale: _scale,
-        child: const Icon(Icons.close_rounded)),
+        child: Icon(Icons.close_rounded)),
     );
   }
 }
@@ -535,7 +535,7 @@ class _PhotoThumbnailState extends State<_PhotoThumbnail>
               onTap: () { HapticFeedback.lightImpact(); widget.onRemove(); },
               child: Container(width: 24, height: 24,
                 decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
-                child: const Icon(Icons.close_rounded, color: Colors.white, size: 14)),
+                child: Icon(Icons.close_rounded, color: Colors.white, size: 14)),
             )),
         ],
       ),
@@ -570,7 +570,7 @@ class _AddTagButtonState extends State<_AddTagButton>
         scale: _scale,
         child: Container(width: 44, height: 44,
           decoration: BoxDecoration(color: widget.color, borderRadius: BorderRadius.circular(12)),
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 22)),
+          child: Icon(Icons.add_rounded, color: Colors.white, size: 22)),
       ),
     );
   }
@@ -719,25 +719,25 @@ class _DatePickerButtonState extends State<_DatePickerButton>
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: widget.date != null ? AppTheme.primary.withOpacity(0.06) : Colors.white,
+            color: widget.date != null ? AppTheme.primary.withOpacity(0.06) : AppTheme.inputFill(context),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: widget.date != null ? AppTheme.primary.withOpacity(0.4) : AppTheme.divider),
           ),
           child: Row(children: [
             Icon(Icons.calendar_today_outlined, size: 18,
-                color: widget.date != null ? AppTheme.primary : AppTheme.textSecondary),
+                color: widget.date != null ? AppTheme.primary : AppTheme.txtSecondary(context)),
             const SizedBox(width: 10),
             Text(
               widget.date == null ? 'Select a date'
                   : '${widget.date!.day}/${widget.date!.month}/${widget.date!.year}',
               style: TextStyle(fontFamily: 'Nunito', fontSize: 14, fontWeight: FontWeight.w500,
-                  color: widget.date == null ? AppTheme.textSecondary : AppTheme.textPrimary),
+                  color: widget.date == null ? AppTheme.txtSecondary(context) : AppTheme.txtPrimary(context)),
             ),
             const Spacer(),
             if (widget.date != null)
               GestureDetector(
                 onTap: widget.onClear,
-                child: const Icon(Icons.close_rounded, size: 16, color: AppTheme.textSecondary),
+                child: Icon(Icons.close_rounded, size: 16, color: AppTheme.txtSecondary(context)),
               ),
           ]),
         ),
@@ -787,7 +787,7 @@ class _PublishButtonState extends State<_PublishButton>
             child: widget.loading
                 ? const SizedBox(width: 22, height: 22,
                     child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
-                : const Text('Publish listing',
+                : Text('Publish listing',
                     style: TextStyle(fontFamily: 'Nunito', fontSize: 16,
                         fontWeight: FontWeight.w800, color: Colors.white)),
           ),

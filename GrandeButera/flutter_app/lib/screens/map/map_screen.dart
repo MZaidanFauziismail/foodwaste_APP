@@ -62,7 +62,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgLight,
+      backgroundColor: AppTheme.bg(context),
       body: Stack(
         children: [
           // Map
@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                         border: Border.all(color: Colors.white, width: 3),
                         boxShadow: [BoxShadow(color: AppTheme.primary.withOpacity(0.4), blurRadius: 12)],
                       ),
-                      child: const Icon(Icons.person_rounded, color: Colors.white, size: 20),
+                      child: Icon(Icons.person_rounded, color: Colors.white, size: 20),
                     ),
                   ),
                 ]),
@@ -138,18 +138,18 @@ class _MapScreenState extends State<MapScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.surface(context),
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20)],
                   ),
                   child: Row(children: [
-                    const Icon(Icons.location_on_outlined, color: AppTheme.primary, size: 20),
+                    Icon(Icons.location_on_outlined, color: AppTheme.primary, size: 20),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         _loading ? 'Loading...' : '${_listings.length} listings nearby',
-                        style: const TextStyle(fontFamily: 'Nunito', fontSize: 15,
-                            fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
+                        style: TextStyle(fontFamily: 'Nunito', fontSize: 15,
+                            fontWeight: FontWeight.w700, color: AppTheme.txtPrimary(context)),
                       ),
                     ),
                     GestureDetector(
@@ -157,7 +157,7 @@ class _MapScreenState extends State<MapScreen> {
                       child: Container(
                         width: 32, height: 32,
                         decoration: BoxDecoration(color: AppTheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                        child: const Icon(Icons.refresh_rounded, color: AppTheme.primary, size: 18),
+                        child: Icon(Icons.refresh_rounded, color: AppTheme.primary, size: 18),
                       ),
                     ),
                   ]),
@@ -180,11 +180,11 @@ class _MapScreenState extends State<MapScreen> {
                 child: Container(
                   width: 44, height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.surface(context),
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12)],
                   ),
-                  child: const Icon(Icons.my_location_rounded, color: AppTheme.primary, size: 22),
+                  child: Icon(Icons.my_location_rounded, color: AppTheme.primary, size: 22),
                 ),
               ),
             ]),
@@ -208,7 +208,7 @@ class _MapScreenState extends State<MapScreen> {
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surface(context),
           borderRadius: BorderRadius.circular(22),
           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 30)],
         ),
@@ -220,8 +220,8 @@ class _MapScreenState extends State<MapScreen> {
           ),
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(l.title, style: const TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w800,
-                fontSize: 15, color: AppTheme.textPrimary), maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(l.title, style: TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w800,
+                fontSize: 15, color: AppTheme.txtPrimary(context)), maxLines: 1, overflow: TextOverflow.ellipsis),
             const SizedBox(height: 4),
             Row(children: [
               Container(
@@ -232,8 +232,8 @@ class _MapScreenState extends State<MapScreen> {
               ),
               if (l.distanceText.isNotEmpty) ...[
                 const SizedBox(width: 8),
-                Icon(Icons.location_on_outlined, size: 13, color: AppTheme.textSecondary),
-                Text(l.distanceText, style: TextStyle(fontFamily: 'Nunito', fontSize: 12, color: AppTheme.textSecondary)),
+                Icon(Icons.location_on_outlined, size: 13, color: AppTheme.txtSecondary(context)),
+                Text(l.distanceText, style: TextStyle(fontFamily: 'Nunito', fontSize: 12, color: AppTheme.txtSecondary(context))),
               ],
             ]),
           ])),
@@ -244,7 +244,7 @@ class _MapScreenState extends State<MapScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(color: catColor, borderRadius: BorderRadius.circular(12)),
-              child: const Text('View', style: TextStyle(fontFamily: 'Nunito', fontSize: 13,
+              child: Text('View', style: TextStyle(fontFamily: 'Nunito', fontSize: 13,
                   fontWeight: FontWeight.w800, color: Colors.white)),
             ),
           ),

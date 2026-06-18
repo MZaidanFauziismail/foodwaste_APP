@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "912344465247",
+    "project_id": "sharebite-d6acc",
+    "storage_bucket": "sharebite-d6acc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912344465247:android:b46dbefabffba36a3f80ea",
+        "android_client_info": {
+          "package_name": "com.example.sharebite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912344465247-t9p0rab52i8q8t1hgu95t6dq1ucskmdv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sharebite",
+            "certificate_hash": "3ac949ab31c7c24df0be7e601d025ad6ff4292d9"
+          }
+        },
+        {
+          "client_id": "912344465247-uk3mq5jfbf6u0sceths00s4t6tkggicb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANM8uAyKPNVbXVe3Qij7y5-rzWUP6vHSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912344465247-uk3mq5jfbf6u0sceths00s4t6tkggicb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

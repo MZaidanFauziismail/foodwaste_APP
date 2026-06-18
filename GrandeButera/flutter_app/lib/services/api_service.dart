@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApiService {
   // Android emulator: 10.0.2.2 | physical device: LAN IP | production: HTTPS API.
   static const String baseUrl =
-      'https://foodwasteapp-production-6eaa.up.railway.app/api';
+      'https://foodwasteapp-production.up.railway.app/api';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
   static String? _token;
@@ -93,6 +93,15 @@ class ApiService {
       Uri.parse('$baseUrl/auth/login'),
       headers: await _headers(auth: false),
       body: jsonEncode({'email': email, 'password': password}),
+    );
+    return _handle(response);
+  }
+
+  static Future<Map<String, dynamic>> loginWithFirebase(String idToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/firebase'),
+      headers: await _headers(auth: false),
+      body: jsonEncode({'idToken': idToken}),
     );
     return _handle(response);
   }
